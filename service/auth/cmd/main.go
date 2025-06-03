@@ -1,10 +1,9 @@
 package main
 
 import (
+	"e-commerce-microservice/auth/internal/config"
+	"e-commerce-microservice/auth/internal/db"
 	"log"
-
-	"github.com/adityaputra42/e-commerce-microservice/auth-service/config"
-	"github.com/adityaputra42/e-commerce-microservice/auth-service/db"
 )
 
 func main() {
