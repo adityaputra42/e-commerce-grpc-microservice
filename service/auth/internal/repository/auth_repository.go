@@ -12,6 +12,7 @@ type AuthRepository interface {
 	CreateAuthUser(ctx context.Context, tx *gorm.DB, authUsers *model.AuthUsers) (model.AuthUsers, error)
 	UpdateAuthUser(ctx context.Context, tx *gorm.DB, authUsers *model.AuthUsers) (model.AuthUsers, error)
 	FindAuthUserById(ctx context.Context, id string) (model.AuthUsers, error)
+	FindAuthUserByEmail(ctx context.Context, email string) (model.AuthUsers, error)
 	CreateAuthSession(ctx context.Context, authSession *model.AuthSessions) (model.AuthSessions, error)
 	FindAuthSessionsById(ctx context.Context, id string) (model.AuthSessions, error)
 	CreateVerifyEmail(ctx context.Context, verifyEmail *model.VerifyEmail) (model.VerifyEmail, error)
@@ -21,6 +22,16 @@ type AuthRepository interface {
 
 type AuthRepositoryImpl struct {
 	db *gorm.DB
+}
+
+// FindAuthUserEmail implements AuthRepository.
+func (a AuthRepositoryImpl) FindAuthUserByEmail(ctx context.Context, email string) (model.AuthUsers, error) {
+	authUser := model.AuthUsers{}
+	err := a.db.WithContext(ctx).Model(&model.AuthUsers{}).Take(&authUser, "email =?", email).Error
+	if err != nil {
+		return model.AuthUsers{}, err
+	}
+	return authUser, nil
 }
 
 // CreateAuthSession implements AuthRepository.

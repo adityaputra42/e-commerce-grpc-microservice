@@ -3,6 +3,8 @@ module e-commerce-microservice/auth
 go 1.24.2
 
 require (
+	github.com/golang-jwt/jwt/v5 v5.2.2
+	github.com/google/uuid v1.6.0
 	github.com/spf13/viper v1.20.1
 	golang.org/x/crypto v0.38.0
 	google.golang.org/grpc v1.67.3

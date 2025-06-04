@@ -22,7 +22,7 @@ rm_pb:
 	rm -f internal/pb/*.go
 
 proto:	
-	protoc --go_out=./internal/. --go-grpc_out=./internal/. ./internal/pb/auth.proto
+	protoc --go_out=. --go-grpc_out=. ./internal/pb/auth.proto
 
 auth_server:
 	go run cmd/main.go

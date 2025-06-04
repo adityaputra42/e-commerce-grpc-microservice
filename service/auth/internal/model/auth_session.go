@@ -4,7 +4,7 @@ import "time"
 
 type AuthSessions struct {
 	ID           string    `gorm:"primaryKey;column:id"`
-	UserId       int64     `gorm:"primaryKey;column:user_id"`
+	UserId       string    `gorm:"primaryKey;column:user_id"`
 	RefreshToken string    `gorm:"column:refresh_token"`
 	UserAgent    string    `gorm:"column:user_agent"`
 	ClientIp     string    `gorm:"column:client_ip"`

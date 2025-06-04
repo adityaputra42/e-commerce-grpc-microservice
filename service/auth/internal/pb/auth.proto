@@ -2,33 +2,61 @@ syntax = "proto3";
 
 package auth;
 
-option go_package = "./pb";
 
+import "google/protobuf/timestamp.proto";
+
+
+option go_package = "./internal/pb";
+
+
+// Message untuk user
+message User {
+  string id = 1;
+  string email = 2;
+  string provider = 3;
+  bool is_verified = 4;
+    google.protobuf.Timestamp created_at = 5;
+    google.protobuf.Timestamp updated_at = 6;
+}
+
+// ===== Register =====
 message RegisterRequest {
   string email = 1;
-  string password = 2;
+  string password = 2; // isi hanya jika provider == EMAIL
+  string id_token = 3; // isi hanya jika provider == GOOGLE
+
 }
 
 message RegisterResponse {
-  string user_id = 1;
-  string message = 2;
+  User user = 1;
+  string access_token = 2;
+  string refresh_token = 3;
 }
 
-message LoginWithEmailRequest {
+// ===== Login by Email/Password =====
+message LoginRequest {
   string email = 1;
   string password = 2;
 }
 
-message LoginWithGoogleRequest {
-  string id_token = 1; // Google OAuth2 ID token
-}
-
 message LoginResponse {
-  string access_token = 1;
-  string refresh_token = 2;
-  string user_id = 3;
+  User user = 1;
+  string access_token = 2;
+  string refresh_token = 3;
 }
 
+// ===== Login by Google OAuth2 =====
+message GoogleLoginRequest {
+  string id_token = 1; // dari Google OAuth2 frontend
+}
+
+message GoogleLoginResponse {
+  User user = 1;
+  string access_token = 2;
+  string refresh_token = 3;
+}
+
+// ===== Refresh Token =====
 message RefreshTokenRequest {
   string refresh_token = 1;
 }
@@ -38,30 +66,30 @@ message RefreshTokenResponse {
   string refresh_token = 2;
 }
 
-message SendVerificationEmailRequest {
-  string email = 1;
-}
-
-message SendVerificationEmailResponse {
-  string message = 1;
-}
-
+// ===== Verify Email =====
 message VerifyEmailRequest {
   string email = 1;
-  string code = 2;
 }
 
 message VerifyEmailResponse {
   string message = 1;
 }
 
-// AuthService
+message ConfirmEmailRequest {
+  string email = 1;
+  string secret_code = 2;
+}
 
+message ConfirmEmailResponse {
+  string message = 1;
+}
+
+// ===== AuthService definition =====
 service AuthService {
   rpc Register(RegisterRequest) returns (RegisterResponse);
-  rpc LoginWithEmail(LoginWithEmailRequest) returns (LoginResponse);
-  rpc LoginWithGoogle(LoginWithGoogleRequest) returns (LoginResponse);
+  rpc Login(LoginRequest) returns (LoginResponse);
+  rpc GoogleLogin(GoogleLoginRequest) returns (GoogleLoginResponse);
   rpc RefreshToken(RefreshTokenRequest) returns (RefreshTokenResponse);
-  rpc SendVerificationEmail(SendVerificationEmailRequest) returns (SendVerificationEmailResponse);
-  rpc VerifyEmail(VerifyEmailRequest) returns (VerifyEmailResponse);
+  rpc SendVerificationEmail(VerifyEmailRequest) returns (VerifyEmailResponse);
+  rpc ConfirmEmail(ConfirmEmailRequest) returns (ConfirmEmailResponse);
 }
