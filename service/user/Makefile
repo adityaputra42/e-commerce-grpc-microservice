@@ -19,11 +19,11 @@ rm_pb:
 	rm -f internal/pb/*.go
 
 proto:	
-	protoc --go_out=. --go-grpc_out=. ./internal/pb/auth.proto
+	protoc --go_out=. --go-grpc_out=. ./internal/pb/user.proto
 
-auth_server:
+user_server:
 	go run cmd/main.go
 
 
 
-.PHONY: migrateup migratedown migrateup1 migratedown1 new_migration auth_server proto rm_pb
+.PHONY: migrateup migratedown migrateup1 migratedown1 new_migration user_server proto rm_pb

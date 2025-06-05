@@ -21,6 +21,7 @@ import (
 	"golang.org/x/sync/errgroup"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
+	"gorm.io/gorm"
 )
 
 var interruptSignals = []os.Signal{
@@ -39,8 +40,12 @@ func main() {
 	defer stop()
 	waitGroup, ctx := errgroup.WithContext(shutdownCtx)
 
-	db.InitDB(conf.DbSource)
-	runGrpcServer(ctx, waitGroup, conf)
+	db, err := db.InitDB(conf.DbSource)
+	if err != nil {
+		log.Fatal().Err(err).Msg("Cannot initialize database")
+		panic(err)
+	}
+	runGrpcServer(ctx, waitGroup, conf, db)
 
 	err = waitGroup.Wait()
 	if err != nil {
@@ -53,6 +58,7 @@ func runGrpcServer(
 	ctx context.Context,
 	waitGroup *errgroup.Group,
 	config config.Configuration,
+	db *gorm.DB,
 
 ) {
 
@@ -61,8 +67,8 @@ func runGrpcServer(
 		log.Fatal().Err(err).Msg("cannot create token maker")
 
 	}
-	userRepo := repository.NewAuthRepository()
-	userService := services.NewAuthServiceImpl(userRepo, tokenMaker, config)
+	userRepo := repository.NewAuthRepository(db)
+	userService := services.NewAuthServiceImpl(userRepo, tokenMaker, config, db)
 	userHandler := handler.NewAuthHandler(userService)
 
 	grpcLogger := grpc.UnaryInterceptor(utils.GrpcLogger)

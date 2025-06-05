@@ -3,7 +3,6 @@ package services
 import (
 	"context"
 	"e-commerce-microservice/auth/internal/config"
-	"e-commerce-microservice/auth/internal/db"
 	"e-commerce-microservice/auth/internal/model"
 	"e-commerce-microservice/auth/internal/pb"
 	"e-commerce-microservice/auth/internal/repository"
@@ -26,6 +25,7 @@ type AuthService interface {
 type AuthServiceImpl struct {
 	tokenMaker token.Maker
 	config     config.Configuration
+	db         *gorm.DB
 	repo       repository.AuthRepository
 }
 
@@ -55,9 +55,8 @@ func (a *AuthServiceImpl) RenewSessionLogin(ctx context.Context, req *pb.Refresh
 // Login implements AuthService.
 func (a *AuthServiceImpl) Login(ctx context.Context, req *pb.LoginRequest, role string) (*pb.LoginResponse, error) {
 	var userAuth pb.LoginResponse
-	db := db.GetConnection()
 
-	err := db.Transaction(func(tx *gorm.DB) error {
+	err := a.db.Transaction(func(tx *gorm.DB) error {
 		user, err := a.repo.FindAuthUserByEmail(ctx, tx, req.Email)
 		if err != nil {
 			return fmt.Errorf("User not found")
@@ -121,9 +120,7 @@ func (a *AuthServiceImpl) Login(ctx context.Context, req *pb.LoginRequest, role 
 func (a *AuthServiceImpl) Register(ctx context.Context, req *pb.RegisterRequest, role string) (*pb.RegisterResponse, error) {
 	var userAuth pb.RegisterResponse
 
-	db := db.GetConnection()
-
-	err := db.Transaction(func(tx *gorm.DB) error {
+	err := a.db.Transaction(func(tx *gorm.DB) error {
 		hashedPassword, err := utils.HashPassword(req.Password)
 		if err != nil {
 			return fmt.Errorf("Failed to hash password")
@@ -189,6 +186,6 @@ func (a *AuthServiceImpl) Register(ctx context.Context, req *pb.RegisterRequest,
 
 func NewAuthServiceImpl(repo repository.AuthRepository,
 	tokenMaker token.Maker,
-	config config.Configuration) AuthService {
-	return &AuthServiceImpl{repo: repo, tokenMaker: tokenMaker, config: config}
+	config config.Configuration, db *gorm.DB) AuthService {
+	return &AuthServiceImpl{repo: repo, tokenMaker: tokenMaker, config: config, db: db}
 }

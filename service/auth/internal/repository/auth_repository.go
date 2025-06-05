@@ -2,7 +2,6 @@ package repository
 
 import (
 	"context"
-	"e-commerce-microservice/auth/internal/db"
 	"e-commerce-microservice/auth/internal/model"
 
 	"gorm.io/gorm"
@@ -119,7 +118,6 @@ func (a AuthRepositoryImpl) UpdateVerifyEmail(ctx context.Context, tx *gorm.DB, 
 	return *verifyEmail, nil
 }
 
-func NewAuthRepository() AuthRepository {
-	db := db.GetConnection()
+func NewAuthRepository(db *gorm.DB) AuthRepository {
 	return AuthRepositoryImpl{db: db}
 }
