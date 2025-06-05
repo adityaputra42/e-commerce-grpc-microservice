@@ -11,19 +11,22 @@ option go_package = "./internal/pb";
 
 // Message untuk user
 message User {
-  string id = 1;
-  string email = 2;
-  string provider = 3;
-  bool is_verified = 4;
-    google.protobuf.Timestamp created_at = 5;
-    google.protobuf.Timestamp updated_at = 6;
+  string username = 1;
+  string full_name = 2;
+  string role = 3;
+  string email = 4;
+  bool is_verified = 5;
+  google.protobuf.Timestamp created_at = 6;
+  google.protobuf.Timestamp updated_at = 7;
 }
 
 // ===== Register =====
 message RegisterRequest {
-  string email = 1;
-  string password = 2; // isi hanya jika provider == EMAIL
-  string id_token = 3; // isi hanya jika provider == GOOGLE
+  string username = 1;
+  string full_name = 2;
+  string email = 3;
+  string password = 4; 
+ 
 
 }
 

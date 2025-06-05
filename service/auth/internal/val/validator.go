@@ -22,6 +22,27 @@ func ValidateString(value string, minLength int, maxlength int) error {
 	return nil
 }
 
+func ValidateUsername(value string) error {
+	if err := ValidateString(value, 3, 100); err != nil {
+		return err
+	}
+
+	if !isValidateUsername(value) {
+		return fmt.Errorf("must contains only lowercase letters, digit or underscore")
+	}
+	return nil
+}
+func ValidateFullName(value string) error {
+	if err := ValidateString(value, 3, 100); err != nil {
+		return err
+	}
+
+	if !isValidateFullName(value) {
+		return fmt.Errorf("must contains only letters or spaces")
+	}
+	return nil
+}
+
 func ValidatePassword(value string) error {
 	if err := ValidateString(value, 8, 100); err != nil {
 		return err

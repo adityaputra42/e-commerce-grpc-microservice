@@ -73,6 +73,12 @@ func validateLoginUser(req *pb.LoginRequest) (violations []*errdetails.BadReques
 
 func validateRegisterUser(req *pb.RegisterRequest) (violations []*errdetails.BadRequest_FieldViolation) {
 
+	if err := val.ValidateUsername(req.GetUsername()); err != nil {
+		violations = append(violations, utils.FieldViolation("username", err))
+	}
+	if err := val.ValidateFullName(req.GetFullName()); err != nil {
+		violations = append(violations, utils.FieldViolation("full_name", err))
+	}
 	if err := val.ValidateEmail(req.GetEmail()); err != nil {
 		violations = append(violations, utils.FieldViolation("email", err))
 	}

@@ -41,7 +41,7 @@ func (a *AuthServiceImpl) RenewSessionLogin(ctx context.Context, req *pb.Refresh
 		return nil, fmt.Errorf("session invalid or expired")
 	}
 
-	accessToken, _, err := a.tokenMaker.CreateToken(payload.UserId, payload.Role, a.config.AccessTokenDuration, token.TokenTypeAccessToken)
+	accessToken, _, err := a.tokenMaker.CreateToken(payload.Username, payload.Role, a.config.AccessTokenDuration, token.TokenTypeAccessToken)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create access token")
 	}
@@ -70,18 +70,18 @@ func (a *AuthServiceImpl) Login(ctx context.Context, req *pb.LoginRequest, role 
 		log.Printf("userAgent: %v", mtdt.UserAgent)
 		log.Printf("ClientIp: %v", mtdt.ClientIP)
 
-		AccessToken, _, err := a.tokenMaker.CreateToken(user.ID, role, a.config.AccessTokenDuration, token.TokenTypeAccessToken)
+		AccessToken, _, err := a.tokenMaker.CreateToken(user.Username, role, a.config.AccessTokenDuration, token.TokenTypeAccessToken)
 		if err != nil {
 			return fmt.Errorf("Failed to create access token")
 		}
-		refreshToken, refreshPayload, err := a.tokenMaker.CreateToken(user.ID, role, a.config.RefreshTokenDuration, token.TokenTypeRefreshToken)
+		refreshToken, refreshPayload, err := a.tokenMaker.CreateToken(user.Username, role, a.config.RefreshTokenDuration, token.TokenTypeRefreshToken)
 		if err != nil {
 			return fmt.Errorf("Failed to create refresh token")
 		}
 		session := model.AuthSessions{
 			ID:           refreshPayload.ID.String(),
 			RefreshToken: refreshToken,
-			UserId:       user.ID,
+			Username:     user.Username,
 			UserAgent:    mtdt.UserAgent,
 			ClientIp:     mtdt.ClientIP,
 			IsBlocked:    false,
@@ -94,9 +94,10 @@ func (a *AuthServiceImpl) Login(ctx context.Context, req *pb.LoginRequest, role 
 		}
 		userAuth = pb.LoginResponse{
 			User: &pb.User{
-				Id:         user.ID,
+				Username:   user.Username,
+				FullName:   user.FullName,
 				Email:      user.Email,
-				Provider:   user.Provider,
+				Role:       user.Role,
 				IsVerified: user.IsVerified,
 				UpdatedAt:  timestamppb.New(user.UpdatedAt),
 				CreatedAt:  timestamppb.New(user.CreatedAt),
@@ -126,9 +127,10 @@ func (a *AuthServiceImpl) Register(ctx context.Context, req *pb.RegisterRequest,
 			return fmt.Errorf("Failed to hash password")
 		}
 		req := model.AuthUsers{
+			Username:       req.Username,
+			FullName:       req.FullName,
 			Email:          req.Email,
 			HashedPassword: hashedPassword,
-			Provider:       "email",
 		}
 
 		user, err := a.repo.CreateAuthUser(ctx, tx, &req)
@@ -139,18 +141,18 @@ func (a *AuthServiceImpl) Register(ctx context.Context, req *pb.RegisterRequest,
 		log.Printf("userAgent: %v", mtdt.UserAgent)
 		log.Printf("ClientIp: %v", mtdt.ClientIP)
 
-		AccessToken, _, err := a.tokenMaker.CreateToken(user.ID, role, a.config.AccessTokenDuration, token.TokenTypeAccessToken)
+		AccessToken, _, err := a.tokenMaker.CreateToken(user.Username, role, a.config.AccessTokenDuration, token.TokenTypeAccessToken)
 		if err != nil {
 			return fmt.Errorf("Failed to create access token")
 		}
-		refreshToken, refreshPayload, err := a.tokenMaker.CreateToken(user.ID, role, a.config.RefreshTokenDuration, token.TokenTypeRefreshToken)
+		refreshToken, refreshPayload, err := a.tokenMaker.CreateToken(user.Username, role, a.config.RefreshTokenDuration, token.TokenTypeRefreshToken)
 		if err != nil {
 			return fmt.Errorf("Failed to create refresh token")
 		}
 		session := model.AuthSessions{
 			ID:           refreshPayload.ID.String(),
 			RefreshToken: refreshToken,
-			UserId:       user.ID,
+			Username:     user.Username,
 			UserAgent:    mtdt.UserAgent,
 			ClientIp:     mtdt.ClientIP,
 			IsBlocked:    false,
@@ -164,9 +166,10 @@ func (a *AuthServiceImpl) Register(ctx context.Context, req *pb.RegisterRequest,
 
 		userAuth = pb.RegisterResponse{
 			User: &pb.User{
-				Id:         user.ID,
+				Username:   user.Username,
+				FullName:   user.FullName,
 				Email:      user.Email,
-				Provider:   user.Provider,
+				Role:       user.Role,
 				IsVerified: user.IsVerified,
 				UpdatedAt:  timestamppb.New(user.UpdatedAt),
 				CreatedAt:  timestamppb.New(user.CreatedAt),

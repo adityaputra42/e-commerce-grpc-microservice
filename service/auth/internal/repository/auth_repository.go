@@ -10,7 +10,7 @@ import (
 type AuthRepository interface {
 	CreateAuthUser(ctx context.Context, tx *gorm.DB, authUsers *model.AuthUsers) (model.AuthUsers, error)
 	UpdateAuthUser(ctx context.Context, tx *gorm.DB, authUsers *model.AuthUsers) (model.AuthUsers, error)
-	FindAuthUserById(ctx context.Context, id string) (model.AuthUsers, error)
+	FindAuthUserById(ctx context.Context, username string) (model.AuthUsers, error)
 	FindAuthUserByEmail(ctx context.Context, tx *gorm.DB, email string) (model.AuthUsers, error)
 	CreateAuthSession(ctx context.Context, tx *gorm.DB, authSession *model.AuthSessions) (model.AuthSessions, error)
 	FindAuthSessionsById(ctx context.Context, id string) (model.AuthSessions, error)
@@ -75,9 +75,9 @@ func (a AuthRepositoryImpl) FindAuthSessionsById(ctx context.Context, id string)
 }
 
 // FindAuthUserById implements AuthRepository.
-func (a AuthRepositoryImpl) FindAuthUserById(ctx context.Context, id string) (model.AuthUsers, error) {
+func (a AuthRepositoryImpl) FindAuthUserById(ctx context.Context, username string) (model.AuthUsers, error) {
 	authUser := model.AuthUsers{}
-	err := a.db.WithContext(ctx).Model(&model.AuthUsers{}).Take(&authUser, "id =?", id).Error
+	err := a.db.WithContext(ctx).Model(&model.AuthUsers{}).Take(&authUser, "username =?", username).Error
 
 	if err != nil {
 		return model.AuthUsers{}, err

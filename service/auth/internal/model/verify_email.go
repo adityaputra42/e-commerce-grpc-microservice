@@ -4,7 +4,7 @@ import "time"
 
 type VerifyEmail struct {
 	ID         int64     `gorm:"primaryKey;column:id"`
-	UserId     string    `gorm:"primaryKey;column:user_id"`
+	Username   string    `gorm:"primaryKey;column:username"`
 	Email      string    `gorm:"column:email"`
 	SecretCode string    `gorm:"column:secret_code"`
 	IsUsed     bool      `gorm:"column:is_used"`
