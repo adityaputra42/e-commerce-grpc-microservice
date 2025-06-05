@@ -12,8 +12,8 @@ type AuthRepository interface {
 	CreateAuthUser(ctx context.Context, tx *gorm.DB, authUsers *model.AuthUsers) (model.AuthUsers, error)
 	UpdateAuthUser(ctx context.Context, tx *gorm.DB, authUsers *model.AuthUsers) (model.AuthUsers, error)
 	FindAuthUserById(ctx context.Context, id string) (model.AuthUsers, error)
-	FindAuthUserByEmail(ctx context.Context, email string) (model.AuthUsers, error)
-	CreateAuthSession(ctx context.Context, authSession *model.AuthSessions) (model.AuthSessions, error)
+	FindAuthUserByEmail(ctx context.Context, tx *gorm.DB, email string) (model.AuthUsers, error)
+	CreateAuthSession(ctx context.Context, tx *gorm.DB, authSession *model.AuthSessions) (model.AuthSessions, error)
 	FindAuthSessionsById(ctx context.Context, id string) (model.AuthSessions, error)
 	CreateVerifyEmail(ctx context.Context, verifyEmail *model.VerifyEmail) (model.VerifyEmail, error)
 	UpdateVerifyEmail(ctx context.Context, tx *gorm.DB, verifyEmail *model.VerifyEmail) (model.VerifyEmail, error)
@@ -25,7 +25,7 @@ type AuthRepositoryImpl struct {
 }
 
 // FindAuthUserEmail implements AuthRepository.
-func (a AuthRepositoryImpl) FindAuthUserByEmail(ctx context.Context, email string) (model.AuthUsers, error) {
+func (a AuthRepositoryImpl) FindAuthUserByEmail(ctx context.Context, tx *gorm.DB, email string) (model.AuthUsers, error) {
 	authUser := model.AuthUsers{}
 	err := a.db.WithContext(ctx).Model(&model.AuthUsers{}).Take(&authUser, "email =?", email).Error
 	if err != nil {
@@ -35,7 +35,7 @@ func (a AuthRepositoryImpl) FindAuthUserByEmail(ctx context.Context, email strin
 }
 
 // CreateAuthSession implements AuthRepository.
-func (a AuthRepositoryImpl) CreateAuthSession(ctx context.Context, authSession *model.AuthSessions) (model.AuthSessions, error) {
+func (a AuthRepositoryImpl) CreateAuthSession(ctx context.Context, tx *gorm.DB, authSession *model.AuthSessions) (model.AuthSessions, error) {
 	result := a.db.WithContext(ctx).Create(&authSession)
 	if result.Error != nil {
 		return model.AuthSessions{}, result.Error

@@ -10,14 +10,15 @@ import (
 	"e-commerce-microservice/auth/internal/token"
 	"e-commerce-microservice/auth/internal/utils"
 	"fmt"
+	"log"
 
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"gorm.io/gorm"
 )
 
 type AuthService interface {
-	Register(ctx context.Context, req *pb.RegisterRequest) (*pb.RegisterResponse, error)
-	Login(ctx context.Context, req *pb.LoginRequest) (*pb.LoginResponse, error)
+	Register(ctx context.Context, req *pb.RegisterRequest, role string) (*pb.RegisterResponse, error)
+	Login(ctx context.Context, req *pb.LoginRequest, role string) (*pb.LoginResponse, error)
 	RenewSessionLogin(ctx context.Context, refreshToekn string) (string, error)
 }
 
@@ -33,12 +34,12 @@ func (a *AuthServiceImpl) RenewSessionLogin(ctx context.Context, refreshToekn st
 }
 
 // Login implements AuthService.
-func (a *AuthServiceImpl) Login(ctx context.Context, req *pb.LoginRequest) (*pb.LoginResponse, error) {
+func (a *AuthServiceImpl) Login(ctx context.Context, req *pb.LoginRequest, role string) (*pb.LoginResponse, error) {
 	var userAuth pb.LoginResponse
 	db := db.GetConnection()
 
 	err := db.Transaction(func(tx *gorm.DB) error {
-		user, err := a.repo.FindAuthUserByEmail(ctx, req.Email)
+		user, err := a.repo.FindAuthUserByEmail(ctx, tx, req.Email)
 		if err != nil {
 			return fmt.Errorf("User not found")
 		}
@@ -47,12 +48,15 @@ func (a *AuthServiceImpl) Login(ctx context.Context, req *pb.LoginRequest) (*pb.
 		if !ok || err != nil {
 			return fmt.Errorf("Password didn't match!")
 		}
+		mtdt := utils.ExtractMetadata(ctx)
+		log.Printf("userAgent: %v", mtdt.UserAgent)
+		log.Printf("ClientIp: %v", mtdt.ClientIP)
 
-		AccessToken, _, err := a.tokenMaker.CreateToken(user.ID, utils.UserRole, a.config.AccessTokenDuration, token.TokenTypeAccessToken)
+		AccessToken, _, err := a.tokenMaker.CreateToken(user.ID, role, a.config.AccessTokenDuration, token.TokenTypeAccessToken)
 		if err != nil {
 			return fmt.Errorf("Failed to create access token")
 		}
-		refreshToken, refreshPayload, err := a.tokenMaker.CreateToken(user.ID, utils.UserRole, a.config.RefreshTokenDuration, token.TokenTypeRefreshToken)
+		refreshToken, refreshPayload, err := a.tokenMaker.CreateToken(user.ID, role, a.config.RefreshTokenDuration, token.TokenTypeRefreshToken)
 		if err != nil {
 			return fmt.Errorf("Failed to create refresh token")
 		}
@@ -60,13 +64,13 @@ func (a *AuthServiceImpl) Login(ctx context.Context, req *pb.LoginRequest) (*pb.
 			ID:           refreshPayload.ID.String(),
 			RefreshToken: refreshToken,
 			UserId:       user.ID,
-			UserAgent:    "",
-			ClientIp:     "",
+			UserAgent:    mtdt.UserAgent,
+			ClientIp:     mtdt.ClientIP,
 			IsBlocked:    false,
 			ExpiredAt:    refreshPayload.ExpiredAt,
 		}
 
-		_, err = a.repo.CreateAuthSession(ctx, &session)
+		_, err = a.repo.CreateAuthSession(ctx, tx, &session)
 		if err != nil {
 			return fmt.Errorf("Failed to create auth session")
 		}
@@ -95,7 +99,7 @@ func (a *AuthServiceImpl) Login(ctx context.Context, req *pb.LoginRequest) (*pb.
 }
 
 // Register implements AuthService.
-func (a *AuthServiceImpl) Register(ctx context.Context, req *pb.RegisterRequest) (*pb.RegisterResponse, error) {
+func (a *AuthServiceImpl) Register(ctx context.Context, req *pb.RegisterRequest, role string) (*pb.RegisterResponse, error) {
 	var userAuth pb.RegisterResponse
 
 	db := db.GetConnection()
@@ -115,6 +119,33 @@ func (a *AuthServiceImpl) Register(ctx context.Context, req *pb.RegisterRequest)
 		if err != nil {
 			return fmt.Errorf("Failed to hash password")
 		}
+		mtdt := utils.ExtractMetadata(ctx)
+		log.Printf("userAgent: %v", mtdt.UserAgent)
+		log.Printf("ClientIp: %v", mtdt.ClientIP)
+
+		AccessToken, _, err := a.tokenMaker.CreateToken(user.ID, role, a.config.AccessTokenDuration, token.TokenTypeAccessToken)
+		if err != nil {
+			return fmt.Errorf("Failed to create access token")
+		}
+		refreshToken, refreshPayload, err := a.tokenMaker.CreateToken(user.ID, role, a.config.RefreshTokenDuration, token.TokenTypeRefreshToken)
+		if err != nil {
+			return fmt.Errorf("Failed to create refresh token")
+		}
+		session := model.AuthSessions{
+			ID:           refreshPayload.ID.String(),
+			RefreshToken: refreshToken,
+			UserId:       user.ID,
+			UserAgent:    mtdt.UserAgent,
+			ClientIp:     mtdt.ClientIP,
+			IsBlocked:    false,
+			ExpiredAt:    refreshPayload.ExpiredAt,
+		}
+
+		_, err = a.repo.CreateAuthSession(ctx, tx, &session)
+		if err != nil {
+			return fmt.Errorf("Failed to create auth session")
+		}
+
 		userAuth = pb.RegisterResponse{
 			User: &pb.User{
 				Id:         user.ID,
@@ -124,6 +155,8 @@ func (a *AuthServiceImpl) Register(ctx context.Context, req *pb.RegisterRequest)
 				UpdatedAt:  timestamppb.New(user.UpdatedAt),
 				CreatedAt:  timestamppb.New(user.CreatedAt),
 			},
+			AccessToken:  AccessToken,
+			RefreshToken: refreshToken,
 		}
 		return nil
 	})
