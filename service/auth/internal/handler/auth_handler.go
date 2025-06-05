@@ -12,18 +12,13 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-type AuthHandler interface {
-	Login(ctx context.Context, req *pb.LoginRequest) (*pb.LoginResponse, error)
-	Register(ctx context.Context, req *pb.RegisterRequest) (*pb.RegisterResponse, error)
-}
-
-type AuthHandlerImpl struct {
+type AuthHandler struct {
 	pb.UnimplementedAuthServiceServer
 	service services.AuthService
 }
 
 // Login implements AuthHandler.
-func (a *AuthHandlerImpl) Login(ctx context.Context, req *pb.LoginRequest) (*pb.LoginResponse, error) {
+func (a *AuthHandler) Login(ctx context.Context, req *pb.LoginRequest) (*pb.LoginResponse, error) {
 	violations := validateLoginUser(req)
 	if violations != nil {
 		return nil, utils.InvalidArgumentError(violations)
@@ -38,7 +33,7 @@ func (a *AuthHandlerImpl) Login(ctx context.Context, req *pb.LoginRequest) (*pb.
 }
 
 // Register implements AuthHandler.
-func (a *AuthHandlerImpl) Register(ctx context.Context, req *pb.RegisterRequest) (*pb.RegisterResponse, error) {
+func (a *AuthHandler) Register(ctx context.Context, req *pb.RegisterRequest) (*pb.RegisterResponse, error) {
 	violations := validateRegisterUser(req)
 	if violations != nil {
 		return nil, utils.InvalidArgumentError(violations)
@@ -52,8 +47,8 @@ func (a *AuthHandlerImpl) Register(ctx context.Context, req *pb.RegisterRequest)
 	return res, nil
 }
 
-func NewAuthServiceImpl(authService services.AuthService) AuthHandler {
-	return &AuthHandlerImpl{service: authService}
+func NewAuthServiceImpl(authService services.AuthService) *AuthHandler {
+	return &AuthHandler{service: authService}
 }
 
 func validateLoginUser(req *pb.LoginRequest) (violations []*errdetails.BadRequest_FieldViolation) {

@@ -10,6 +10,7 @@ type Configuration struct {
 	DbDriver             string        `mapstructure:"DB_DRIVER"`
 	DbSource             string        `mapstructure:"DB_SOURCE"`
 	ServerAddress        string        `mapstructure:"ADDRESS_SERVER"`
+	GrpcServerAddress    string        `mapstructure:"GRPC_SERVER_ADDRESS"`
 	SecretKey            string        `mapstructure:"SECRET_KEY"`
 	AccessTokenDuration  time.Duration `mapstructure:"ACCESS_TOKEN_DURATION"`
 	RefreshTokenDuration time.Duration `mapstructure:"REFRESH_TOKEN_DURATIOn"`

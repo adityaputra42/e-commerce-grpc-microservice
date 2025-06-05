@@ -168,6 +168,8 @@ func (a *AuthServiceImpl) Register(ctx context.Context, req *pb.RegisterRequest,
 
 }
 
-func NewAuthServiceImpl(repo repository.AuthRepository) AuthService {
-	return &AuthServiceImpl{repo: repo}
+func NewAuthServiceImpl(repo repository.AuthRepository,
+	tokenMaker token.Maker,
+	config config.Configuration) AuthService {
+	return &AuthServiceImpl{repo: repo, tokenMaker: tokenMaker, config: config}
 }

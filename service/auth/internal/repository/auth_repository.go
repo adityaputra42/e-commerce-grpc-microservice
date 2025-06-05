@@ -119,7 +119,7 @@ func (a AuthRepositoryImpl) UpdateVerifyEmail(ctx context.Context, tx *gorm.DB, 
 	return *verifyEmail, nil
 }
 
-func NewSessionRepository() AuthRepository {
+func NewAuthRepository() AuthRepository {
 	db := db.GetConnection()
 	return AuthRepositoryImpl{db: db}
 }
