@@ -31,6 +31,14 @@ func (a *AuthHandler) Login(ctx context.Context, req *pb.LoginRequest) (*pb.Logi
 	}
 	return res, nil
 }
+func (a *AuthHandler) RenewSessionLogin(ctx context.Context, req *pb.RefreshTokenRequest) (*pb.RefreshTokenResponse, error) {
+
+	res, err := a.service.RenewSessionLogin(ctx, req)
+	if err != nil {
+		status.Errorf(codes.Internal, "%s", err.Error())
+	}
+	return res, nil
+}
 
 // Register implements AuthHandler.
 func (a *AuthHandler) Register(ctx context.Context, req *pb.RegisterRequest) (*pb.RegisterResponse, error) {
@@ -42,12 +50,12 @@ func (a *AuthHandler) Register(ctx context.Context, req *pb.RegisterRequest) (*p
 
 	res, err := a.service.Register(ctx, req, utils.UserRole)
 	if err != nil {
-		status.Errorf(codes.Internal, "%s", err.Error())
+		return nil, status.Errorf(codes.Internal, "%s", err.Error())
 	}
 	return res, nil
 }
 
-func NewAuthServiceImpl(authService services.AuthService) *AuthHandler {
+func NewAuthHandler(authService services.AuthService) *AuthHandler {
 	return &AuthHandler{service: authService}
 }
 

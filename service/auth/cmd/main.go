@@ -35,11 +35,11 @@ func main() {
 		log.Fatal().Err(err).Msg("Cannot load config")
 		panic(err)
 	}
-	ctx, stop := signal.NotifyContext(context.Background(), interruptSignals...)
+	shutdownCtx, stop := signal.NotifyContext(context.Background(), interruptSignals...)
 	defer stop()
-	db.InitDB(conf.DbSource)
-	waitGroup, ctx := errgroup.WithContext(ctx)
+	waitGroup, ctx := errgroup.WithContext(shutdownCtx)
 
+	db.InitDB(conf.DbSource)
 	runGrpcServer(ctx, waitGroup, conf)
 
 	err = waitGroup.Wait()
@@ -63,10 +63,11 @@ func runGrpcServer(
 	}
 	userRepo := repository.NewAuthRepository()
 	userService := services.NewAuthServiceImpl(userRepo, tokenMaker, config)
-	userHandler := handler.NewAuthServiceImpl(userService)
+	userHandler := handler.NewAuthHandler(userService)
 
-	gprcLogger := grpc.UnaryInterceptor(utils.GrpcLogger)
-	grpcServer := grpc.NewServer(gprcLogger)
+	grpcLogger := grpc.UnaryInterceptor(utils.GrpcLogger)
+	grpcServer := grpc.NewServer(grpcLogger)
+
 	pb.RegisterAuthServiceServer(grpcServer, userHandler)
 	reflection.Register(grpcServer)
 

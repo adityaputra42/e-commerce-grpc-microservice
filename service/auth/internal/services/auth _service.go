@@ -11,6 +11,7 @@ import (
 	"e-commerce-microservice/auth/internal/utils"
 	"fmt"
 	"log"
+	"time"
 
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"gorm.io/gorm"
@@ -19,7 +20,7 @@ import (
 type AuthService interface {
 	Register(ctx context.Context, req *pb.RegisterRequest, role string) (*pb.RegisterResponse, error)
 	Login(ctx context.Context, req *pb.LoginRequest, role string) (*pb.LoginResponse, error)
-	RenewSessionLogin(ctx context.Context, refreshToekn string) (string, error)
+	RenewSessionLogin(ctx context.Context, req *pb.RefreshTokenRequest) (*pb.RefreshTokenResponse, error)
 }
 
 type AuthServiceImpl struct {
@@ -29,8 +30,26 @@ type AuthServiceImpl struct {
 }
 
 // RenewSessionLogin implements AuthService.
-func (a *AuthServiceImpl) RenewSessionLogin(ctx context.Context, refreshToekn string) (string, error) {
-	panic("unimplemented")
+func (a *AuthServiceImpl) RenewSessionLogin(ctx context.Context, req *pb.RefreshTokenRequest) (*pb.RefreshTokenResponse, error) {
+	payload, err := a.tokenMaker.VerifyToken(req.GetRefreshToken(), token.TokenTypeRefreshToken)
+	if err != nil {
+		return nil, fmt.Errorf("invalid refresh token")
+	}
+
+	session, err := a.repo.FindAuthSessionsById(ctx, payload.ID.String())
+	if err != nil || session.IsBlocked || session.ExpiredAt.Before(time.Now()) {
+		return nil, fmt.Errorf("session invalid or expired")
+	}
+
+	accessToken, _, err := a.tokenMaker.CreateToken(payload.UserId, payload.Role, a.config.AccessTokenDuration, token.TokenTypeAccessToken)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create access token")
+	}
+
+	return &pb.RefreshTokenResponse{
+		AccessToken:  accessToken,
+		RefreshToken: req.RefreshToken,
+	}, nil
 }
 
 // Login implements AuthService.
@@ -77,7 +96,7 @@ func (a *AuthServiceImpl) Login(ctx context.Context, req *pb.LoginRequest, role 
 		userAuth = pb.LoginResponse{
 			User: &pb.User{
 				Id:         user.ID,
-				Email:      user.HashedPassword,
+				Email:      user.Email,
 				Provider:   user.Provider,
 				IsVerified: user.IsVerified,
 				UpdatedAt:  timestamppb.New(user.UpdatedAt),
@@ -149,7 +168,7 @@ func (a *AuthServiceImpl) Register(ctx context.Context, req *pb.RegisterRequest,
 		userAuth = pb.RegisterResponse{
 			User: &pb.User{
 				Id:         user.ID,
-				Email:      user.HashedPassword,
+				Email:      user.Email,
 				Provider:   user.Provider,
 				IsVerified: user.IsVerified,
 				UpdatedAt:  timestamppb.New(user.UpdatedAt),
