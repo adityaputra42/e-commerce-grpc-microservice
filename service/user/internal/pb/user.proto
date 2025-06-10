@@ -1,0 +1,112 @@
+syntax = "proto3";
+
+package user;
+
+
+import "google/protobuf/timestamp.proto";
+
+
+option go_package = "./internal/pb";
+
+// =========================
+// MESSAGE DEFINITIONS
+// =========================
+
+// Representasi pengguna (berdasarkan tabel `users`)
+message User {
+  string username = 1;
+  string full_name = 2;
+  string phone_number = 3;
+  google.protobuf.Timestamp created_at = 4;
+  google.protobuf.Timestamp updated_at = 5;
+}
+
+// Representasi alamat pengguna (tabel `user_addresses`)
+message UserAddress {
+  string id = 1;
+  string username = 2;
+  string label = 3;
+  string recipient_name = 4;
+  string recipient_phone = 5;
+  string address_line = 6;
+  string city = 7;
+  string province = 8;
+  string postal_code = 9;
+  bool is_selected = 10;
+  google.protobuf.Timestamp created_at = 11;
+  google.protobuf.Timestamp updated_at = 12;
+}
+
+// =========================
+// REQUEST MESSAGES
+// =========================
+
+message CreateUserRequest {
+  string username = 1;
+  string full_name = 2;
+  string phone_number = 3;
+}
+
+message GetUserRequest {
+  string username = 1;
+}
+
+message CreateAddressRequest {
+  string username = 1;
+  string label = 2;
+  string recipient_name = 3;
+  string recipient_phone = 4;
+  string address_line = 5;
+  string city = 6;
+  string province = 7;
+  string postal_code = 8;
+  bool is_selected = 9;
+}
+
+message UpdateAddressRequest {
+  string id = 1;
+  string label = 2;
+  string recipient_name = 3;
+  string recipient_phone = 4;
+  string address_line = 5;
+  string city = 6;
+  string province = 7;
+  string postal_code = 8;
+  bool is_selected = 9;
+}
+
+message GetUserAddressesRequest {
+  string username = 1;
+}
+
+// =========================
+// RESPONSE MESSAGES
+// =========================
+
+message UserResponse {
+  User user = 1;
+}
+
+message UserAddressesResponse {
+  repeated UserAddress addresses = 1;
+}
+
+message UserAddressResponse {
+  UserAddress address = 1;
+}
+
+message EmptyResponse {}
+
+
+// =========================
+// SERVICE DEFINITION
+// =========================
+
+service UserService {
+  rpc CreateUser(CreateUserRequest) returns (UserResponse);
+  rpc GetUser(GetUserRequest) returns (UserResponse);
+
+  rpc CreateAddress(CreateAddressRequest) returns (UserAddressResponse);
+  rpc UpdateAddress(UpdateAddressRequest) returns (UserAddressResponse);
+  rpc GetAddresses(GetUserAddressesRequest) returns (UserAddressesResponse);
+}
