@@ -91,6 +91,7 @@ message CreateProductRequest {
   string description = 3;
   repeated string images = 4;
   double price = 5;
+  repeated CreateColorVarianRequest color_varians = 6;
 }
 
 message UpdateProductRequest {
@@ -106,6 +107,7 @@ message CreateColorVarianRequest {
   string name = 2;
   string color = 3;
   repeated string images = 4;
+  repeated CreateSizeVarianRequest size_varians = 8;
 }
 
 message UpdateColorVarianRequest {

@@ -639,12 +639,13 @@ func (x *UpdateCategoryRequest) GetIcon() string {
 }
 
 type CreateProductRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	CategoryId    int64                  `protobuf:"varint,1,opt,name=category_id,json=categoryId,proto3" json:"category_id,omitempty"`
-	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	Description   string                 `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
-	Images        []string               `protobuf:"bytes,4,rep,name=images,proto3" json:"images,omitempty"`
-	Price         float64                `protobuf:"fixed64,5,opt,name=price,proto3" json:"price,omitempty"`
+	state         protoimpl.MessageState      `protogen:"open.v1"`
+	CategoryId    int64                       `protobuf:"varint,1,opt,name=category_id,json=categoryId,proto3" json:"category_id,omitempty"`
+	Name          string                      `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Description   string                      `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
+	Images        []string                    `protobuf:"bytes,4,rep,name=images,proto3" json:"images,omitempty"`
+	Price         float64                     `protobuf:"fixed64,5,opt,name=price,proto3" json:"price,omitempty"`
+	ColorVarians  []*CreateColorVarianRequest `protobuf:"bytes,6,rep,name=color_varians,json=colorVarians,proto3" json:"color_varians,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -712,6 +713,13 @@ func (x *CreateProductRequest) GetPrice() float64 {
 		return x.Price
 	}
 	return 0
+}
+
+func (x *CreateProductRequest) GetColorVarians() []*CreateColorVarianRequest {
+	if x != nil {
+		return x.ColorVarians
+	}
+	return nil
 }
 
 type UpdateProductRequest struct {
@@ -791,11 +799,12 @@ func (x *UpdateProductRequest) GetPrice() float64 {
 }
 
 type CreateColorVarianRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	ProductId     int64                  `protobuf:"varint,1,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`
-	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	Color         string                 `protobuf:"bytes,3,opt,name=color,proto3" json:"color,omitempty"`
-	Images        []string               `protobuf:"bytes,4,rep,name=images,proto3" json:"images,omitempty"`
+	state         protoimpl.MessageState     `protogen:"open.v1"`
+	ProductId     int64                      `protobuf:"varint,1,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`
+	Name          string                     `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Color         string                     `protobuf:"bytes,3,opt,name=color,proto3" json:"color,omitempty"`
+	Images        []string                   `protobuf:"bytes,4,rep,name=images,proto3" json:"images,omitempty"`
+	SizeVarians   []*CreateSizeVarianRequest `protobuf:"bytes,8,rep,name=size_varians,json=sizeVarians,proto3" json:"size_varians,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -854,6 +863,13 @@ func (x *CreateColorVarianRequest) GetColor() string {
 func (x *CreateColorVarianRequest) GetImages() []string {
 	if x != nil {
 		return x.Images
+	}
+	return nil
+}
+
+func (x *CreateColorVarianRequest) GetSizeVarians() []*CreateSizeVarianRequest {
+	if x != nil {
+		return x.SizeVarians
 	}
 	return nil
 }
@@ -1338,26 +1354,28 @@ const file_internal_pb_product_proto_rawDesc = "" +
 	"\x15UpdateCategoryRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x12\n" +
-	"\x04icon\x18\x03 \x01(\tR\x04icon\"\x9b\x01\n" +
+	"\x04icon\x18\x03 \x01(\tR\x04icon\"\xe3\x01\n" +
 	"\x14CreateProductRequest\x12\x1f\n" +
 	"\vcategory_id\x18\x01 \x01(\x03R\n" +
 	"categoryId\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12 \n" +
 	"\vdescription\x18\x03 \x01(\tR\vdescription\x12\x16\n" +
 	"\x06images\x18\x04 \x03(\tR\x06images\x12\x14\n" +
-	"\x05price\x18\x05 \x01(\x01R\x05price\"\x8a\x01\n" +
+	"\x05price\x18\x05 \x01(\x01R\x05price\x12F\n" +
+	"\rcolor_varians\x18\x06 \x03(\v2!.product.CreateColorVarianRequestR\fcolorVarians\"\x8a\x01\n" +
 	"\x14UpdateProductRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12 \n" +
 	"\vdescription\x18\x03 \x01(\tR\vdescription\x12\x16\n" +
 	"\x06images\x18\x04 \x03(\tR\x06images\x12\x14\n" +
-	"\x05price\x18\x05 \x01(\x01R\x05price\"{\n" +
+	"\x05price\x18\x05 \x01(\x01R\x05price\"\xc0\x01\n" +
 	"\x18CreateColorVarianRequest\x12\x1d\n" +
 	"\n" +
 	"product_id\x18\x01 \x01(\x03R\tproductId\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x14\n" +
 	"\x05color\x18\x03 \x01(\tR\x05color\x12\x16\n" +
-	"\x06images\x18\x04 \x03(\tR\x06images\"l\n" +
+	"\x06images\x18\x04 \x03(\tR\x06images\x12C\n" +
+	"\fsize_varians\x18\b \x03(\v2 .product.CreateSizeVarianRequestR\vsizeVarians\"l\n" +
 	"\x18UpdateColorVarianRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x14\n" +
@@ -1457,55 +1475,57 @@ var file_internal_pb_product_proto_depIdxs = []int32{
 	18, // 11: product.Product.created_at:type_name -> google.protobuf.Timestamp
 	18, // 12: product.Product.updated_at:type_name -> google.protobuf.Timestamp
 	0,  // 13: product.Product.category:type_name -> product.Category
-	0,  // 14: product.CategoryList.categories:type_name -> product.Category
-	4,  // 15: product.ProductList.products:type_name -> product.Product
-	2,  // 16: product.ColorVarianList.color_varians:type_name -> product.ColorVarian
-	1,  // 17: product.SizeVarianList.size_varians:type_name -> product.SizeVarian
-	5,  // 18: product.ProductService.CreateCategory:input_type -> product.CreateCategoryRequest
-	13, // 19: product.ProductService.GetCategory:input_type -> product.GetByIDRequest
-	19, // 20: product.ProductService.ListCategories:input_type -> google.protobuf.Empty
-	6,  // 21: product.ProductService.UpdateCategory:input_type -> product.UpdateCategoryRequest
-	13, // 22: product.ProductService.DeleteCategory:input_type -> product.GetByIDRequest
-	7,  // 23: product.ProductService.CreateProduct:input_type -> product.CreateProductRequest
-	13, // 24: product.ProductService.GetProduct:input_type -> product.GetByIDRequest
-	19, // 25: product.ProductService.ListProducts:input_type -> google.protobuf.Empty
-	8,  // 26: product.ProductService.UpdateProduct:input_type -> product.UpdateProductRequest
-	13, // 27: product.ProductService.DeleteProduct:input_type -> product.GetByIDRequest
-	9,  // 28: product.ProductService.CreateColorVarian:input_type -> product.CreateColorVarianRequest
-	13, // 29: product.ProductService.GetColorVarian:input_type -> product.GetByIDRequest
-	13, // 30: product.ProductService.ListColorVarians:input_type -> product.GetByIDRequest
-	10, // 31: product.ProductService.UpdateColorVarian:input_type -> product.UpdateColorVarianRequest
-	13, // 32: product.ProductService.DeleteColorVarian:input_type -> product.GetByIDRequest
-	11, // 33: product.ProductService.CreateSizeVarian:input_type -> product.CreateSizeVarianRequest
-	13, // 34: product.ProductService.GetSizeVarian:input_type -> product.GetByIDRequest
-	13, // 35: product.ProductService.ListSizeVarians:input_type -> product.GetByIDRequest
-	12, // 36: product.ProductService.UpdateSizeVarian:input_type -> product.UpdateSizeVarianRequest
-	13, // 37: product.ProductService.DeleteSizeVarian:input_type -> product.GetByIDRequest
-	0,  // 38: product.ProductService.CreateCategory:output_type -> product.Category
-	0,  // 39: product.ProductService.GetCategory:output_type -> product.Category
-	14, // 40: product.ProductService.ListCategories:output_type -> product.CategoryList
-	0,  // 41: product.ProductService.UpdateCategory:output_type -> product.Category
-	19, // 42: product.ProductService.DeleteCategory:output_type -> google.protobuf.Empty
-	4,  // 43: product.ProductService.CreateProduct:output_type -> product.Product
-	3,  // 44: product.ProductService.GetProduct:output_type -> product.ProductDetail
-	15, // 45: product.ProductService.ListProducts:output_type -> product.ProductList
-	4,  // 46: product.ProductService.UpdateProduct:output_type -> product.Product
-	19, // 47: product.ProductService.DeleteProduct:output_type -> google.protobuf.Empty
-	2,  // 48: product.ProductService.CreateColorVarian:output_type -> product.ColorVarian
-	2,  // 49: product.ProductService.GetColorVarian:output_type -> product.ColorVarian
-	16, // 50: product.ProductService.ListColorVarians:output_type -> product.ColorVarianList
-	2,  // 51: product.ProductService.UpdateColorVarian:output_type -> product.ColorVarian
-	19, // 52: product.ProductService.DeleteColorVarian:output_type -> google.protobuf.Empty
-	1,  // 53: product.ProductService.CreateSizeVarian:output_type -> product.SizeVarian
-	1,  // 54: product.ProductService.GetSizeVarian:output_type -> product.SizeVarian
-	17, // 55: product.ProductService.ListSizeVarians:output_type -> product.SizeVarianList
-	1,  // 56: product.ProductService.UpdateSizeVarian:output_type -> product.SizeVarian
-	19, // 57: product.ProductService.DeleteSizeVarian:output_type -> google.protobuf.Empty
-	38, // [38:58] is the sub-list for method output_type
-	18, // [18:38] is the sub-list for method input_type
-	18, // [18:18] is the sub-list for extension type_name
-	18, // [18:18] is the sub-list for extension extendee
-	0,  // [0:18] is the sub-list for field type_name
+	9,  // 14: product.CreateProductRequest.color_varians:type_name -> product.CreateColorVarianRequest
+	11, // 15: product.CreateColorVarianRequest.size_varians:type_name -> product.CreateSizeVarianRequest
+	0,  // 16: product.CategoryList.categories:type_name -> product.Category
+	4,  // 17: product.ProductList.products:type_name -> product.Product
+	2,  // 18: product.ColorVarianList.color_varians:type_name -> product.ColorVarian
+	1,  // 19: product.SizeVarianList.size_varians:type_name -> product.SizeVarian
+	5,  // 20: product.ProductService.CreateCategory:input_type -> product.CreateCategoryRequest
+	13, // 21: product.ProductService.GetCategory:input_type -> product.GetByIDRequest
+	19, // 22: product.ProductService.ListCategories:input_type -> google.protobuf.Empty
+	6,  // 23: product.ProductService.UpdateCategory:input_type -> product.UpdateCategoryRequest
+	13, // 24: product.ProductService.DeleteCategory:input_type -> product.GetByIDRequest
+	7,  // 25: product.ProductService.CreateProduct:input_type -> product.CreateProductRequest
+	13, // 26: product.ProductService.GetProduct:input_type -> product.GetByIDRequest
+	19, // 27: product.ProductService.ListProducts:input_type -> google.protobuf.Empty
+	8,  // 28: product.ProductService.UpdateProduct:input_type -> product.UpdateProductRequest
+	13, // 29: product.ProductService.DeleteProduct:input_type -> product.GetByIDRequest
+	9,  // 30: product.ProductService.CreateColorVarian:input_type -> product.CreateColorVarianRequest
+	13, // 31: product.ProductService.GetColorVarian:input_type -> product.GetByIDRequest
+	13, // 32: product.ProductService.ListColorVarians:input_type -> product.GetByIDRequest
+	10, // 33: product.ProductService.UpdateColorVarian:input_type -> product.UpdateColorVarianRequest
+	13, // 34: product.ProductService.DeleteColorVarian:input_type -> product.GetByIDRequest
+	11, // 35: product.ProductService.CreateSizeVarian:input_type -> product.CreateSizeVarianRequest
+	13, // 36: product.ProductService.GetSizeVarian:input_type -> product.GetByIDRequest
+	13, // 37: product.ProductService.ListSizeVarians:input_type -> product.GetByIDRequest
+	12, // 38: product.ProductService.UpdateSizeVarian:input_type -> product.UpdateSizeVarianRequest
+	13, // 39: product.ProductService.DeleteSizeVarian:input_type -> product.GetByIDRequest
+	0,  // 40: product.ProductService.CreateCategory:output_type -> product.Category
+	0,  // 41: product.ProductService.GetCategory:output_type -> product.Category
+	14, // 42: product.ProductService.ListCategories:output_type -> product.CategoryList
+	0,  // 43: product.ProductService.UpdateCategory:output_type -> product.Category
+	19, // 44: product.ProductService.DeleteCategory:output_type -> google.protobuf.Empty
+	4,  // 45: product.ProductService.CreateProduct:output_type -> product.Product
+	3,  // 46: product.ProductService.GetProduct:output_type -> product.ProductDetail
+	15, // 47: product.ProductService.ListProducts:output_type -> product.ProductList
+	4,  // 48: product.ProductService.UpdateProduct:output_type -> product.Product
+	19, // 49: product.ProductService.DeleteProduct:output_type -> google.protobuf.Empty
+	2,  // 50: product.ProductService.CreateColorVarian:output_type -> product.ColorVarian
+	2,  // 51: product.ProductService.GetColorVarian:output_type -> product.ColorVarian
+	16, // 52: product.ProductService.ListColorVarians:output_type -> product.ColorVarianList
+	2,  // 53: product.ProductService.UpdateColorVarian:output_type -> product.ColorVarian
+	19, // 54: product.ProductService.DeleteColorVarian:output_type -> google.protobuf.Empty
+	1,  // 55: product.ProductService.CreateSizeVarian:output_type -> product.SizeVarian
+	1,  // 56: product.ProductService.GetSizeVarian:output_type -> product.SizeVarian
+	17, // 57: product.ProductService.ListSizeVarians:output_type -> product.SizeVarianList
+	1,  // 58: product.ProductService.UpdateSizeVarian:output_type -> product.SizeVarian
+	19, // 59: product.ProductService.DeleteSizeVarian:output_type -> google.protobuf.Empty
+	40, // [40:60] is the sub-list for method output_type
+	20, // [20:40] is the sub-list for method input_type
+	20, // [20:20] is the sub-list for extension type_name
+	20, // [20:20] is the sub-list for extension extendee
+	0,  // [0:20] is the sub-list for field type_name
 }
 
 func init() { file_internal_pb_product_proto_init() }
