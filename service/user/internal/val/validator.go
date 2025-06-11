@@ -4,11 +4,14 @@ import (
 	"fmt"
 	"net/mail"
 	"regexp"
+
+	"github.com/google/uuid"
 )
 
 var (
 	isValidateUsername = regexp.MustCompile(`^[a-z0-9_]+$`).MatchString
 	isValidateFullName = regexp.MustCompile(`^[a-zA-Z\s]+$`).MatchString
+	isValidatePhone    = regexp.MustCompile(`^(\+?\d{1,3})?[\s\-]?(\(?\d{1,4}\)?)[\s\-]?\d{3,4}[\s\-]?\d{3,4}$`).MatchString
 )
 
 func ValidateString(value string, minLength int, maxlength int) error {
@@ -19,6 +22,47 @@ func ValidateString(value string, minLength int, maxlength int) error {
 		return fmt.Errorf("must content from %d-%d characters", minLength, maxlength)
 	}
 
+	return nil
+}
+
+func ValidateUsername(value string) error {
+	if err := ValidateString(value, 3, 100); err != nil {
+		return err
+	}
+
+	if !isValidateUsername(value) {
+		return fmt.Errorf("must contains only lowercase letters, digit or underscore")
+	}
+	return nil
+}
+func ValidateFullName(value string) error {
+	if err := ValidateString(value, 3, 100); err != nil {
+		return err
+	}
+
+	if !isValidateFullName(value) {
+		return fmt.Errorf("must contains only letters or spaces")
+	}
+	return nil
+}
+
+func ValidateUUID(value string) error {
+	_, err := uuid.Parse(value)
+
+	if err != nil {
+		return fmt.Errorf("invalid id")
+	}
+	return nil
+}
+
+func ValidatePhoneNumber(value string) error {
+	if err := ValidateString(value, 9, 15); err != nil {
+		return err
+	}
+
+	if !isValidatePhone(value) {
+		return fmt.Errorf("invalid phone number")
+	}
 	return nil
 }
 

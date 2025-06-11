@@ -60,7 +60,6 @@ message CreateAddressRequest {
   string city = 6;
   string province = 7;
   string postal_code = 8;
-  bool is_selected = 9;
 }
 
 message UpdateAddressRequest {

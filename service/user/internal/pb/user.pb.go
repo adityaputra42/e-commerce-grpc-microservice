@@ -346,7 +346,6 @@ type CreateAddressRequest struct {
 	City           string                 `protobuf:"bytes,6,opt,name=city,proto3" json:"city,omitempty"`
 	Province       string                 `protobuf:"bytes,7,opt,name=province,proto3" json:"province,omitempty"`
 	PostalCode     string                 `protobuf:"bytes,8,opt,name=postal_code,json=postalCode,proto3" json:"postal_code,omitempty"`
-	IsSelected     bool                   `protobuf:"varint,9,opt,name=is_selected,json=isSelected,proto3" json:"is_selected,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -435,13 +434,6 @@ func (x *CreateAddressRequest) GetPostalCode() string {
 		return x.PostalCode
 	}
 	return ""
-}
-
-func (x *CreateAddressRequest) GetIsSelected() bool {
-	if x != nil {
-		return x.IsSelected
-	}
-	return false
 }
 
 type UpdateAddressRequest struct {
@@ -800,7 +792,7 @@ const file_internal_pb_user_proto_rawDesc = "" +
 	"\tfull_name\x18\x02 \x01(\tR\bfullName\x12!\n" +
 	"\fphone_number\x18\x03 \x01(\tR\vphoneNumber\",\n" +
 	"\x0eGetUserRequest\x12\x1a\n" +
-	"\busername\x18\x01 \x01(\tR\busername\"\xad\x02\n" +
+	"\busername\x18\x01 \x01(\tR\busername\"\x8c\x02\n" +
 	"\x14CreateAddressRequest\x12\x1a\n" +
 	"\busername\x18\x01 \x01(\tR\busername\x12\x14\n" +
 	"\x05label\x18\x02 \x01(\tR\x05label\x12%\n" +
@@ -810,9 +802,7 @@ const file_internal_pb_user_proto_rawDesc = "" +
 	"\x04city\x18\x06 \x01(\tR\x04city\x12\x1a\n" +
 	"\bprovince\x18\a \x01(\tR\bprovince\x12\x1f\n" +
 	"\vpostal_code\x18\b \x01(\tR\n" +
-	"postalCode\x12\x1f\n" +
-	"\vis_selected\x18\t \x01(\bR\n" +
-	"isSelected\"\xa1\x02\n" +
+	"postalCode\"\xa1\x02\n" +
 	"\x14UpdateAddressRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x14\n" +
 	"\x05label\x18\x02 \x01(\tR\x05label\x12%\n" +
