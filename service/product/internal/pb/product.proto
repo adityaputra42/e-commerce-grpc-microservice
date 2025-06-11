@@ -1,0 +1,183 @@
+syntax = "proto3";
+
+package product;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+option go_package = "./internal/pb";
+
+// ===== MODELS =====
+
+message Category {
+  int64 id = 1;
+  string name = 2;
+  string icon = 3;
+  google.protobuf.Timestamp created_at = 4;
+  google.protobuf.Timestamp updated_at = 5;
+}
+
+message SizeVarian {
+  int64 id = 1;
+  int64 color_varian_id = 2;
+  string size = 3;
+  int64 stock = 4;
+  google.protobuf.Timestamp created_at = 5;
+  google.protobuf.Timestamp updated_at = 6;
+}
+
+message ColorVarian {
+  int64 id = 1;
+  int64 product_id = 2;
+  string name = 3;
+  string color = 4;
+  repeated string images = 5;
+  google.protobuf.Timestamp created_at = 6;
+  google.protobuf.Timestamp updated_at = 7;
+
+  // Nested size varians
+  repeated SizeVarian size_varians = 8;
+}
+
+
+
+message ProductDetail {
+  int64 id = 1;
+  int64 category_id = 2;
+  string name = 3;
+  string description = 4;
+  repeated string images = 5;
+  float rating = 6;
+  double price = 7;
+  google.protobuf.Timestamp created_at = 8;
+  google.protobuf.Timestamp updated_at = 9;
+
+  // Nested relations
+  Category category = 10;
+  repeated ColorVarian color_varians = 11;
+}
+
+message Product {
+  int64 id = 1;
+  int64 category_id = 2;
+  string name = 3;
+  string description = 4;
+  repeated string images = 5;
+  float rating = 6;
+  double price = 7;
+  google.protobuf.Timestamp created_at = 8;
+  google.protobuf.Timestamp updated_at = 9;
+
+  // Nested relations
+  Category category = 10;
+}
+
+// ===== REQUESTS =====
+
+message CreateCategoryRequest {
+  string name = 1;
+  string icon = 2;
+}
+
+message UpdateCategoryRequest {
+  int64 id = 1;
+  string name = 2;
+  string icon = 3;
+}
+
+message CreateProductRequest {
+  int64 category_id = 1;
+  string name = 2;
+  string description = 3;
+  repeated string images = 4;
+  double price = 5;
+}
+
+message UpdateProductRequest {
+  int64 id = 1;
+  string name = 2;
+  string description = 3;
+  repeated string images = 4;
+  double price = 5;
+}
+
+message CreateColorVarianRequest {
+  int64 product_id = 1;
+  string name = 2;
+  string color = 3;
+  repeated string images = 4;
+}
+
+message UpdateColorVarianRequest {
+  int64 id = 1;
+  string name = 2;
+  string color = 3;
+  repeated string images = 4;
+}
+
+message CreateSizeVarianRequest {
+  int64 color_varian_id = 1;
+  string size = 2;
+  int64 stock = 3;
+}
+
+message UpdateSizeVarianRequest {
+  int64 id = 1;
+  string size = 2;
+  int64 stock = 3;
+}
+
+message GetByIDRequest {
+  int64 id = 1;
+}
+
+// ===== LIST RESPONSES =====
+
+message CategoryList {
+  repeated Category categories = 1;
+}
+
+message ProductList {
+  repeated Product products = 1;
+}
+
+
+message ColorVarianList {
+  repeated ColorVarian color_varians = 1;
+}
+
+message SizeVarianList {
+  repeated SizeVarian size_varians = 1;
+}
+
+// ===== SERVICE =====
+
+service ProductService {
+  // Category
+  rpc CreateCategory(CreateCategoryRequest) returns (Category);
+  rpc GetCategory(GetByIDRequest) returns (Category);
+  rpc ListCategories(google.protobuf.Empty) returns (CategoryList);
+  rpc UpdateCategory(UpdateCategoryRequest) returns (Category);
+  rpc DeleteCategory(GetByIDRequest) returns (google.protobuf.Empty);
+
+  // Product
+  rpc CreateProduct(CreateProductRequest) returns (Product);
+  rpc GetProduct(GetByIDRequest) returns (ProductDetail); // Get full detail
+  rpc ListProducts(google.protobuf.Empty) returns (ProductList);
+  rpc UpdateProduct(UpdateProductRequest) returns (Product);
+  rpc DeleteProduct(GetByIDRequest) returns (google.protobuf.Empty);
+
+  // Color Varian
+  rpc CreateColorVarian(CreateColorVarianRequest) returns (ColorVarian);
+  rpc GetColorVarian(GetByIDRequest) returns (ColorVarian);
+  rpc ListColorVarians(GetByIDRequest) returns (ColorVarianList); // by Product ID
+  rpc UpdateColorVarian(UpdateColorVarianRequest) returns (ColorVarian);
+  rpc DeleteColorVarian(GetByIDRequest) returns (google.protobuf.Empty);
+
+  // Size Varian
+  rpc CreateSizeVarian(CreateSizeVarianRequest) returns (SizeVarian);
+  rpc GetSizeVarian(GetByIDRequest) returns (SizeVarian);
+  rpc ListSizeVarians(GetByIDRequest) returns (SizeVarianList); // by ColorVarian ID
+  rpc UpdateSizeVarian(UpdateSizeVarianRequest) returns (SizeVarian);
+  rpc DeleteSizeVarian(GetByIDRequest) returns (google.protobuf.Empty);
+}

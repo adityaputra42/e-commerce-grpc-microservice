@@ -19,7 +19,7 @@ rm_pb:
 	rm -f internal/pb/*.go
 
 proto:	
-	protoc --go_out=. --go-grpc_out=. ./internal/pb/user.proto
+	protoc --go_out=. --go-grpc_out=. ./internal/pb/product.proto
 
 user_server:
 	go run cmd/main.go
