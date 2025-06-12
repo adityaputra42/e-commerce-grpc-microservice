@@ -68,17 +68,63 @@ func (c CategoryServiceImpl) DeleteCategory(ctx context.Context, req *pb.GetByID
 
 // GetCategory implements CategoryService.
 func (c CategoryServiceImpl) GetCategory(ctx context.Context, req *pb.GetByIDRequest) (*pb.Category, error) {
-	panic("unimplemented")
+	value, err := c.Store.GetCategories(ctx, req.Id)
+	if err != nil {
+		return nil, fmt.Errorf("Failed to get category")
+	}
+	resp := &pb.Category{Id: value.ID, Name: value.Name, Icon: value.Icon, UpdatedAt: timestamppb.New(value.UpdatedAt), CreatedAt: timestamppb.New(value.CreatedAt)}
+	return resp, nil
 }
 
 // GetListCategory implements CategoryService.
 func (c CategoryServiceImpl) GetListCategory(ctx context.Context) (*pb.CategoryList, error) {
-	panic("unimplemented")
+
+	listCategory, err := c.Store.ListCategories(ctx, db.ListCategoriesParams{})
+
+	categories := []*pb.Category{}
+	if err != nil {
+		return nil, fmt.Errorf("Failed to get list category")
+	}
+
+	for _, value := range listCategory {
+
+		categories = append(categories, &pb.Category{Id: value.ID, Name: value.Name, Icon: value.Icon, UpdatedAt: timestamppb.New(value.UpdatedAt), CreatedAt: timestamppb.New(value.CreatedAt)})
+
+	}
+
+	return &pb.CategoryList{
+		Categories: categories,
+	}, nil
+
 }
 
 // UpdateCategory implements CategoryService.
 func (c CategoryServiceImpl) UpdateCategory(ctx context.Context, req *pb.UpdateCategoryRequest) (*pb.Category, error) {
-	panic("unimplemented")
+	_, err := utils.AuthorizationUser(ctx, []string{utils.AdminRole}, c.TokenMaker)
+
+	if err != nil {
+		return nil, utils.UnauthenticatedError(err)
+	}
+
+	category, err := c.Store.GetCategoriesForUpdate(ctx, req.GetId())
+	if err != nil {
+		return nil, fmt.Errorf("Failed to get category")
+	}
+
+	param := db.UpdateCategoriesParams{
+		ID:   category.ID,
+		Name: req.Name,
+		Icon: req.Icon,
+	}
+
+	newCategory, err := c.Store.UpdateCategories(ctx, param)
+
+	if err != nil {
+		return nil, fmt.Errorf("Failed to update category")
+	}
+	resp := &pb.Category{Id: newCategory.ID, Name: newCategory.Name, Icon: newCategory.Icon, UpdatedAt: timestamppb.New(newCategory.UpdatedAt), CreatedAt: timestamppb.New(newCategory.CreatedAt)}
+	return resp, nil
+
 }
 
 func NewCategoryService(Config config.Configuration,
