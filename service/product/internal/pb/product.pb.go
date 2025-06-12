@@ -1106,6 +1106,58 @@ func (x *GetByIDRequest) GetId() int64 {
 	return 0
 }
 
+type PaginationRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Page          int32                  `protobuf:"varint,1,opt,name=page,proto3" json:"page,omitempty"`                         // halaman saat ini
+	PageSize      int32                  `protobuf:"varint,2,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"` // jumlah item per halaman
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PaginationRequest) Reset() {
+	*x = PaginationRequest{}
+	mi := &file_internal_pb_product_proto_msgTypes[14]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PaginationRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PaginationRequest) ProtoMessage() {}
+
+func (x *PaginationRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_internal_pb_product_proto_msgTypes[14]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PaginationRequest.ProtoReflect.Descriptor instead.
+func (*PaginationRequest) Descriptor() ([]byte, []int) {
+	return file_internal_pb_product_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *PaginationRequest) GetPage() int32 {
+	if x != nil {
+		return x.Page
+	}
+	return 0
+}
+
+func (x *PaginationRequest) GetPageSize() int32 {
+	if x != nil {
+		return x.PageSize
+	}
+	return 0
+}
+
 type CategoryList struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Categories    []*Category            `protobuf:"bytes,1,rep,name=categories,proto3" json:"categories,omitempty"`
@@ -1115,7 +1167,7 @@ type CategoryList struct {
 
 func (x *CategoryList) Reset() {
 	*x = CategoryList{}
-	mi := &file_internal_pb_product_proto_msgTypes[14]
+	mi := &file_internal_pb_product_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1127,7 +1179,7 @@ func (x *CategoryList) String() string {
 func (*CategoryList) ProtoMessage() {}
 
 func (x *CategoryList) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_pb_product_proto_msgTypes[14]
+	mi := &file_internal_pb_product_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1140,7 +1192,7 @@ func (x *CategoryList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CategoryList.ProtoReflect.Descriptor instead.
 func (*CategoryList) Descriptor() ([]byte, []int) {
-	return file_internal_pb_product_proto_rawDescGZIP(), []int{14}
+	return file_internal_pb_product_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *CategoryList) GetCategories() []*Category {
@@ -1153,13 +1205,17 @@ func (x *CategoryList) GetCategories() []*Category {
 type ProductList struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Products      []*Product             `protobuf:"bytes,1,rep,name=products,proto3" json:"products,omitempty"`
+	Page          int32                  `protobuf:"varint,2,opt,name=page,proto3" json:"page,omitempty"`
+	PageSize      int32                  `protobuf:"varint,3,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
+	TotalPages    int32                  `protobuf:"varint,4,opt,name=total_pages,json=totalPages,proto3" json:"total_pages,omitempty"`
+	TotalItems    int64                  `protobuf:"varint,5,opt,name=total_items,json=totalItems,proto3" json:"total_items,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *ProductList) Reset() {
 	*x = ProductList{}
-	mi := &file_internal_pb_product_proto_msgTypes[15]
+	mi := &file_internal_pb_product_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1171,7 +1227,7 @@ func (x *ProductList) String() string {
 func (*ProductList) ProtoMessage() {}
 
 func (x *ProductList) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_pb_product_proto_msgTypes[15]
+	mi := &file_internal_pb_product_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1184,7 +1240,7 @@ func (x *ProductList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ProductList.ProtoReflect.Descriptor instead.
 func (*ProductList) Descriptor() ([]byte, []int) {
-	return file_internal_pb_product_proto_rawDescGZIP(), []int{15}
+	return file_internal_pb_product_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *ProductList) GetProducts() []*Product {
@@ -1192,6 +1248,34 @@ func (x *ProductList) GetProducts() []*Product {
 		return x.Products
 	}
 	return nil
+}
+
+func (x *ProductList) GetPage() int32 {
+	if x != nil {
+		return x.Page
+	}
+	return 0
+}
+
+func (x *ProductList) GetPageSize() int32 {
+	if x != nil {
+		return x.PageSize
+	}
+	return 0
+}
+
+func (x *ProductList) GetTotalPages() int32 {
+	if x != nil {
+		return x.TotalPages
+	}
+	return 0
+}
+
+func (x *ProductList) GetTotalItems() int64 {
+	if x != nil {
+		return x.TotalItems
+	}
+	return 0
 }
 
 type ColorVarianList struct {
@@ -1203,7 +1287,7 @@ type ColorVarianList struct {
 
 func (x *ColorVarianList) Reset() {
 	*x = ColorVarianList{}
-	mi := &file_internal_pb_product_proto_msgTypes[16]
+	mi := &file_internal_pb_product_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1215,7 +1299,7 @@ func (x *ColorVarianList) String() string {
 func (*ColorVarianList) ProtoMessage() {}
 
 func (x *ColorVarianList) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_pb_product_proto_msgTypes[16]
+	mi := &file_internal_pb_product_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1228,7 +1312,7 @@ func (x *ColorVarianList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ColorVarianList.ProtoReflect.Descriptor instead.
 func (*ColorVarianList) Descriptor() ([]byte, []int) {
-	return file_internal_pb_product_proto_rawDescGZIP(), []int{16}
+	return file_internal_pb_product_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *ColorVarianList) GetColorVarians() []*ColorVarian {
@@ -1247,7 +1331,7 @@ type SizeVarianList struct {
 
 func (x *SizeVarianList) Reset() {
 	*x = SizeVarianList{}
-	mi := &file_internal_pb_product_proto_msgTypes[17]
+	mi := &file_internal_pb_product_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1259,7 +1343,7 @@ func (x *SizeVarianList) String() string {
 func (*SizeVarianList) ProtoMessage() {}
 
 func (x *SizeVarianList) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_pb_product_proto_msgTypes[17]
+	mi := &file_internal_pb_product_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1272,7 +1356,7 @@ func (x *SizeVarianList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SizeVarianList.ProtoReflect.Descriptor instead.
 func (*SizeVarianList) Descriptor() ([]byte, []int) {
-	return file_internal_pb_product_proto_rawDescGZIP(), []int{17}
+	return file_internal_pb_product_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *SizeVarianList) GetSizeVarians() []*SizeVarian {
@@ -1390,17 +1474,26 @@ const file_internal_pb_product_proto_rawDesc = "" +
 	"\x04size\x18\x02 \x01(\tR\x04size\x12\x14\n" +
 	"\x05stock\x18\x03 \x01(\x03R\x05stock\" \n" +
 	"\x0eGetByIDRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\"A\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\"D\n" +
+	"\x11PaginationRequest\x12\x12\n" +
+	"\x04page\x18\x01 \x01(\x05R\x04page\x12\x1b\n" +
+	"\tpage_size\x18\x02 \x01(\x05R\bpageSize\"A\n" +
 	"\fCategoryList\x121\n" +
 	"\n" +
 	"categories\x18\x01 \x03(\v2\x11.product.CategoryR\n" +
-	"categories\";\n" +
+	"categories\"\xae\x01\n" +
 	"\vProductList\x12,\n" +
-	"\bproducts\x18\x01 \x03(\v2\x10.product.ProductR\bproducts\"L\n" +
+	"\bproducts\x18\x01 \x03(\v2\x10.product.ProductR\bproducts\x12\x12\n" +
+	"\x04page\x18\x02 \x01(\x05R\x04page\x12\x1b\n" +
+	"\tpage_size\x18\x03 \x01(\x05R\bpageSize\x12\x1f\n" +
+	"\vtotal_pages\x18\x04 \x01(\x05R\n" +
+	"totalPages\x12\x1f\n" +
+	"\vtotal_items\x18\x05 \x01(\x03R\n" +
+	"totalItems\"L\n" +
 	"\x0fColorVarianList\x129\n" +
 	"\rcolor_varians\x18\x01 \x03(\v2\x14.product.ColorVarianR\fcolorVarians\"H\n" +
 	"\x0eSizeVarianList\x126\n" +
-	"\fsize_varians\x18\x01 \x03(\v2\x13.product.SizeVarianR\vsizeVarians2\xe5\n" +
+	"\fsize_varians\x18\x01 \x03(\v2\x13.product.SizeVarianR\vsizeVarians2\xe9\n" +
 	"\n" +
 	"\x0eProductService\x12C\n" +
 	"\x0eCreateCategory\x12\x1e.product.CreateCategoryRequest\x1a\x11.product.Category\x129\n" +
@@ -1410,8 +1503,8 @@ const file_internal_pb_product_proto_rawDesc = "" +
 	"\x0eDeleteCategory\x12\x17.product.GetByIDRequest\x1a\x16.google.protobuf.Empty\x12@\n" +
 	"\rCreateProduct\x12\x1d.product.CreateProductRequest\x1a\x10.product.Product\x12=\n" +
 	"\n" +
-	"GetProduct\x12\x17.product.GetByIDRequest\x1a\x16.product.ProductDetail\x12<\n" +
-	"\fListProducts\x12\x16.google.protobuf.Empty\x1a\x14.product.ProductList\x12@\n" +
+	"GetProduct\x12\x17.product.GetByIDRequest\x1a\x16.product.ProductDetail\x12@\n" +
+	"\fListProducts\x12\x1a.product.PaginationRequest\x1a\x14.product.ProductList\x12@\n" +
 	"\rUpdateProduct\x12\x1d.product.UpdateProductRequest\x1a\x10.product.Product\x12@\n" +
 	"\rDeleteProduct\x12\x17.product.GetByIDRequest\x1a\x16.google.protobuf.Empty\x12L\n" +
 	"\x11CreateColorVarian\x12!.product.CreateColorVarianRequest\x1a\x14.product.ColorVarian\x12?\n" +
@@ -1437,7 +1530,7 @@ func file_internal_pb_product_proto_rawDescGZIP() []byte {
 	return file_internal_pb_product_proto_rawDescData
 }
 
-var file_internal_pb_product_proto_msgTypes = make([]protoimpl.MessageInfo, 18)
+var file_internal_pb_product_proto_msgTypes = make([]protoimpl.MessageInfo, 19)
 var file_internal_pb_product_proto_goTypes = []any{
 	(*Category)(nil),                 // 0: product.Category
 	(*SizeVarian)(nil),               // 1: product.SizeVarian
@@ -1453,27 +1546,28 @@ var file_internal_pb_product_proto_goTypes = []any{
 	(*CreateSizeVarianRequest)(nil),  // 11: product.CreateSizeVarianRequest
 	(*UpdateSizeVarianRequest)(nil),  // 12: product.UpdateSizeVarianRequest
 	(*GetByIDRequest)(nil),           // 13: product.GetByIDRequest
-	(*CategoryList)(nil),             // 14: product.CategoryList
-	(*ProductList)(nil),              // 15: product.ProductList
-	(*ColorVarianList)(nil),          // 16: product.ColorVarianList
-	(*SizeVarianList)(nil),           // 17: product.SizeVarianList
-	(*timestamppb.Timestamp)(nil),    // 18: google.protobuf.Timestamp
-	(*emptypb.Empty)(nil),            // 19: google.protobuf.Empty
+	(*PaginationRequest)(nil),        // 14: product.PaginationRequest
+	(*CategoryList)(nil),             // 15: product.CategoryList
+	(*ProductList)(nil),              // 16: product.ProductList
+	(*ColorVarianList)(nil),          // 17: product.ColorVarianList
+	(*SizeVarianList)(nil),           // 18: product.SizeVarianList
+	(*timestamppb.Timestamp)(nil),    // 19: google.protobuf.Timestamp
+	(*emptypb.Empty)(nil),            // 20: google.protobuf.Empty
 }
 var file_internal_pb_product_proto_depIdxs = []int32{
-	18, // 0: product.Category.created_at:type_name -> google.protobuf.Timestamp
-	18, // 1: product.Category.updated_at:type_name -> google.protobuf.Timestamp
-	18, // 2: product.SizeVarian.created_at:type_name -> google.protobuf.Timestamp
-	18, // 3: product.SizeVarian.updated_at:type_name -> google.protobuf.Timestamp
-	18, // 4: product.ColorVarian.created_at:type_name -> google.protobuf.Timestamp
-	18, // 5: product.ColorVarian.updated_at:type_name -> google.protobuf.Timestamp
+	19, // 0: product.Category.created_at:type_name -> google.protobuf.Timestamp
+	19, // 1: product.Category.updated_at:type_name -> google.protobuf.Timestamp
+	19, // 2: product.SizeVarian.created_at:type_name -> google.protobuf.Timestamp
+	19, // 3: product.SizeVarian.updated_at:type_name -> google.protobuf.Timestamp
+	19, // 4: product.ColorVarian.created_at:type_name -> google.protobuf.Timestamp
+	19, // 5: product.ColorVarian.updated_at:type_name -> google.protobuf.Timestamp
 	1,  // 6: product.ColorVarian.size_varians:type_name -> product.SizeVarian
-	18, // 7: product.ProductDetail.created_at:type_name -> google.protobuf.Timestamp
-	18, // 8: product.ProductDetail.updated_at:type_name -> google.protobuf.Timestamp
+	19, // 7: product.ProductDetail.created_at:type_name -> google.protobuf.Timestamp
+	19, // 8: product.ProductDetail.updated_at:type_name -> google.protobuf.Timestamp
 	0,  // 9: product.ProductDetail.category:type_name -> product.Category
 	2,  // 10: product.ProductDetail.color_varians:type_name -> product.ColorVarian
-	18, // 11: product.Product.created_at:type_name -> google.protobuf.Timestamp
-	18, // 12: product.Product.updated_at:type_name -> google.protobuf.Timestamp
+	19, // 11: product.Product.created_at:type_name -> google.protobuf.Timestamp
+	19, // 12: product.Product.updated_at:type_name -> google.protobuf.Timestamp
 	0,  // 13: product.Product.category:type_name -> product.Category
 	9,  // 14: product.CreateProductRequest.color_varians:type_name -> product.CreateColorVarianRequest
 	11, // 15: product.CreateColorVarianRequest.size_varians:type_name -> product.CreateSizeVarianRequest
@@ -1483,12 +1577,12 @@ var file_internal_pb_product_proto_depIdxs = []int32{
 	1,  // 19: product.SizeVarianList.size_varians:type_name -> product.SizeVarian
 	5,  // 20: product.ProductService.CreateCategory:input_type -> product.CreateCategoryRequest
 	13, // 21: product.ProductService.GetCategory:input_type -> product.GetByIDRequest
-	19, // 22: product.ProductService.ListCategories:input_type -> google.protobuf.Empty
+	20, // 22: product.ProductService.ListCategories:input_type -> google.protobuf.Empty
 	6,  // 23: product.ProductService.UpdateCategory:input_type -> product.UpdateCategoryRequest
 	13, // 24: product.ProductService.DeleteCategory:input_type -> product.GetByIDRequest
 	7,  // 25: product.ProductService.CreateProduct:input_type -> product.CreateProductRequest
 	13, // 26: product.ProductService.GetProduct:input_type -> product.GetByIDRequest
-	19, // 27: product.ProductService.ListProducts:input_type -> google.protobuf.Empty
+	14, // 27: product.ProductService.ListProducts:input_type -> product.PaginationRequest
 	8,  // 28: product.ProductService.UpdateProduct:input_type -> product.UpdateProductRequest
 	13, // 29: product.ProductService.DeleteProduct:input_type -> product.GetByIDRequest
 	9,  // 30: product.ProductService.CreateColorVarian:input_type -> product.CreateColorVarianRequest
@@ -1503,24 +1597,24 @@ var file_internal_pb_product_proto_depIdxs = []int32{
 	13, // 39: product.ProductService.DeleteSizeVarian:input_type -> product.GetByIDRequest
 	0,  // 40: product.ProductService.CreateCategory:output_type -> product.Category
 	0,  // 41: product.ProductService.GetCategory:output_type -> product.Category
-	14, // 42: product.ProductService.ListCategories:output_type -> product.CategoryList
+	15, // 42: product.ProductService.ListCategories:output_type -> product.CategoryList
 	0,  // 43: product.ProductService.UpdateCategory:output_type -> product.Category
-	19, // 44: product.ProductService.DeleteCategory:output_type -> google.protobuf.Empty
+	20, // 44: product.ProductService.DeleteCategory:output_type -> google.protobuf.Empty
 	4,  // 45: product.ProductService.CreateProduct:output_type -> product.Product
 	3,  // 46: product.ProductService.GetProduct:output_type -> product.ProductDetail
-	15, // 47: product.ProductService.ListProducts:output_type -> product.ProductList
+	16, // 47: product.ProductService.ListProducts:output_type -> product.ProductList
 	4,  // 48: product.ProductService.UpdateProduct:output_type -> product.Product
-	19, // 49: product.ProductService.DeleteProduct:output_type -> google.protobuf.Empty
+	20, // 49: product.ProductService.DeleteProduct:output_type -> google.protobuf.Empty
 	2,  // 50: product.ProductService.CreateColorVarian:output_type -> product.ColorVarian
 	2,  // 51: product.ProductService.GetColorVarian:output_type -> product.ColorVarian
-	16, // 52: product.ProductService.ListColorVarians:output_type -> product.ColorVarianList
+	17, // 52: product.ProductService.ListColorVarians:output_type -> product.ColorVarianList
 	2,  // 53: product.ProductService.UpdateColorVarian:output_type -> product.ColorVarian
-	19, // 54: product.ProductService.DeleteColorVarian:output_type -> google.protobuf.Empty
+	20, // 54: product.ProductService.DeleteColorVarian:output_type -> google.protobuf.Empty
 	1,  // 55: product.ProductService.CreateSizeVarian:output_type -> product.SizeVarian
 	1,  // 56: product.ProductService.GetSizeVarian:output_type -> product.SizeVarian
-	17, // 57: product.ProductService.ListSizeVarians:output_type -> product.SizeVarianList
+	18, // 57: product.ProductService.ListSizeVarians:output_type -> product.SizeVarianList
 	1,  // 58: product.ProductService.UpdateSizeVarian:output_type -> product.SizeVarian
-	19, // 59: product.ProductService.DeleteSizeVarian:output_type -> google.protobuf.Empty
+	20, // 59: product.ProductService.DeleteSizeVarian:output_type -> google.protobuf.Empty
 	40, // [40:60] is the sub-list for method output_type
 	20, // [20:40] is the sub-list for method input_type
 	20, // [20:20] is the sub-list for extension type_name
@@ -1539,7 +1633,7 @@ func file_internal_pb_product_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_internal_pb_product_proto_rawDesc), len(file_internal_pb_product_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   18,
+			NumMessages:   19,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

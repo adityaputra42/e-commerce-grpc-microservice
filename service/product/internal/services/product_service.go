@@ -11,7 +11,7 @@ import (
 type ProductService interface {
 	CreateProduct(ctx context.Context, req *pb.CreateProductRequest) (*pb.ProductDetail, error)
 	GetProduct(ctx context.Context, req *pb.GetByIDRequest) (*pb.ProductDetail, error)
-	GetListProduct(ctx context.Context) (*pb.ProductList, error)
+	GetListProduct(ctx context.Context, req *pb.PaginationRequest) (*pb.ProductList, error)
 	UpdateProduct(ctx context.Context, req *pb.UpdateProductRequest) (*pb.ProductDetail, error)
 	DeleteProduct(ctx context.Context, req *pb.GetByIDRequest) error
 }
@@ -33,7 +33,7 @@ func (p ProductServiceImpl) DeleteProduct(ctx context.Context, req *pb.GetByIDRe
 }
 
 // GetListProduct implements ProductService.
-func (p ProductServiceImpl) GetListProduct(ctx context.Context) (*pb.ProductList, error) {
+func (p ProductServiceImpl) GetListProduct(ctx context.Context, req *pb.PaginationRequest) (*pb.ProductList, error) {
 	panic("unimplemented")
 }
 

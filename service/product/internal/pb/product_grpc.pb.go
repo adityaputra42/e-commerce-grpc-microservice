@@ -55,7 +55,7 @@ type ProductServiceClient interface {
 	// Product
 	CreateProduct(ctx context.Context, in *CreateProductRequest, opts ...grpc.CallOption) (*Product, error)
 	GetProduct(ctx context.Context, in *GetByIDRequest, opts ...grpc.CallOption) (*ProductDetail, error)
-	ListProducts(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ProductList, error)
+	ListProducts(ctx context.Context, in *PaginationRequest, opts ...grpc.CallOption) (*ProductList, error)
 	UpdateProduct(ctx context.Context, in *UpdateProductRequest, opts ...grpc.CallOption) (*Product, error)
 	DeleteProduct(ctx context.Context, in *GetByIDRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// Color Varian
@@ -150,7 +150,7 @@ func (c *productServiceClient) GetProduct(ctx context.Context, in *GetByIDReques
 	return out, nil
 }
 
-func (c *productServiceClient) ListProducts(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ProductList, error) {
+func (c *productServiceClient) ListProducts(ctx context.Context, in *PaginationRequest, opts ...grpc.CallOption) (*ProductList, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ProductList)
 	err := c.cc.Invoke(ctx, ProductService_ListProducts_FullMethodName, in, out, cOpts...)
@@ -293,7 +293,7 @@ type ProductServiceServer interface {
 	// Product
 	CreateProduct(context.Context, *CreateProductRequest) (*Product, error)
 	GetProduct(context.Context, *GetByIDRequest) (*ProductDetail, error)
-	ListProducts(context.Context, *emptypb.Empty) (*ProductList, error)
+	ListProducts(context.Context, *PaginationRequest) (*ProductList, error)
 	UpdateProduct(context.Context, *UpdateProductRequest) (*Product, error)
 	DeleteProduct(context.Context, *GetByIDRequest) (*emptypb.Empty, error)
 	// Color Varian
@@ -339,7 +339,7 @@ func (UnimplementedProductServiceServer) CreateProduct(context.Context, *CreateP
 func (UnimplementedProductServiceServer) GetProduct(context.Context, *GetByIDRequest) (*ProductDetail, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetProduct not implemented")
 }
-func (UnimplementedProductServiceServer) ListProducts(context.Context, *emptypb.Empty) (*ProductList, error) {
+func (UnimplementedProductServiceServer) ListProducts(context.Context, *PaginationRequest) (*ProductList, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListProducts not implemented")
 }
 func (UnimplementedProductServiceServer) UpdateProduct(context.Context, *UpdateProductRequest) (*Product, error) {
@@ -526,7 +526,7 @@ func _ProductService_GetProduct_Handler(srv interface{}, ctx context.Context, de
 }
 
 func _ProductService_ListProducts_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(emptypb.Empty)
+	in := new(PaginationRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -538,7 +538,7 @@ func _ProductService_ListProducts_Handler(srv interface{}, ctx context.Context, 
 		FullMethod: ProductService_ListProducts_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ProductServiceServer).ListProducts(ctx, req.(*emptypb.Empty))
+		return srv.(ProductServiceServer).ListProducts(ctx, req.(*PaginationRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }

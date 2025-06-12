@@ -133,6 +133,10 @@ message GetByIDRequest {
   int64 id = 1;
 }
 
+message PaginationRequest {
+  int32 page = 1;          // halaman saat ini
+  int32 page_size = 2;     // jumlah item per halaman
+}
 // ===== LIST RESPONSES =====
 
 message CategoryList {
@@ -141,6 +145,10 @@ message CategoryList {
 
 message ProductList {
   repeated Product products = 1;
+  int32 page = 2;
+  int32 page_size = 3;
+  int32 total_pages = 4;
+  int64 total_items = 5;
 }
 
 
@@ -165,7 +173,7 @@ service ProductService {
   // Product
   rpc CreateProduct(CreateProductRequest) returns (Product);
   rpc GetProduct(GetByIDRequest) returns (ProductDetail); // Get full detail
-  rpc ListProducts(google.protobuf.Empty) returns (ProductList);
+  rpc ListProducts(PaginationRequest) returns (ProductList);
   rpc UpdateProduct(UpdateProductRequest) returns (Product);
   rpc DeleteProduct(GetByIDRequest) returns (google.protobuf.Empty);
 
