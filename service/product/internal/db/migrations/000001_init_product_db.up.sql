@@ -16,7 +16,7 @@ CREATE TABLE "products" (
   "description" text NOT NULL,
   "images" text[] NOT NULL,
   "rating" real NOT NULL DEFAULT 0,
-  "price" numeric(10,2) NOT NULL,
+  "price" double precision NOT NULL,
   "updated_at" timestamptz NOT NULL DEFAULT now(),
   "created_at" timestamptz NOT NULL DEFAULT now(),
   "deleted_at" timestamptz DEFAULT NULL

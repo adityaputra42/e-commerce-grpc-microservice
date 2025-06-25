@@ -38,7 +38,7 @@ type Product struct {
 	Images      []string `json:"images"`
 	Rating      float32  `json:"rating"`
 	// must be positive
-	Price     pgtype.Numeric     `json:"price"`
+	Price     float64            `json:"price"`
 	UpdatedAt time.Time          `json:"updated_at"`
 	CreatedAt time.Time          `json:"created_at"`
 	DeletedAt pgtype.Timestamptz `json:"deleted_at"`
