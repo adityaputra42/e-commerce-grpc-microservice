@@ -19,15 +19,11 @@ rm_pb:
 	rm -f internal/pb/*.go
 
 proto:	
-	protoc --go_out=. --go-grpc_out=. ./internal/pb/product.proto
+	protoc --go_out=. --go-grpc_out=. ./internal/pb/cars.proto
 
 user_server:
 	go run cmd/main.go
 
-sqlc:
-	sqlc generate
 
 
-
-
-.PHONY: migrateup migratedown migrateup1 migratedown1 new_migration user_server proto rm_pb sqlc
+.PHONY: migrateup migratedown migrateup1 migratedown1 new_migration user_server proto rm_pb

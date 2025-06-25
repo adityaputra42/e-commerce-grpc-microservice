@@ -1,4 +1,0 @@
-DROP TABLE IF EXISTS categories;
-DROP TABLE IF EXISTS products;
-DROP TABLE IF EXISTS color_varians;
-DROP TABLE IF EXISTS size_varians;

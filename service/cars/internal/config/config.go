@@ -21,7 +21,7 @@ var conf Configuration
 func LoadConfig(path string) (config Configuration, err error) {
 
 	viper.AddConfigPath(path)
-	viper.SetConfigFile("user.env")
+	viper.SetConfigFile("cars.env")
 
 	viper.AutomaticEnv()
 
