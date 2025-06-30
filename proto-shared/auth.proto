@@ -9,11 +9,11 @@ import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 
 
-option go_package = "e-commerce-microservice/auth/internal/pb";
+option go_package = "e-commerce-microservice/proto-shared/gen/pb";
 
 
 // Message untuk user
-message User {
+message AuthUser {
   string username = 1;
   string full_name = 2;
   string role = 3;
@@ -34,7 +34,7 @@ message RegisterRequest {
 }
 
 message RegisterResponse {
-  User user = 1;
+  AuthUser user = 1;
   string access_token = 2;
   string refresh_token = 3;
 }
@@ -46,7 +46,7 @@ message LoginRequest {
 }
 
 message LoginResponse {
-  User user = 1;
+  AuthUser user = 1;
   string access_token = 2;
   string refresh_token = 3;
 }
@@ -57,7 +57,7 @@ message GoogleLoginRequest {
 }
 
 message GoogleLoginResponse {
-  User user = 1;
+  AuthUser user = 1;
   string access_token = 2;
   string refresh_token = 3;
 }

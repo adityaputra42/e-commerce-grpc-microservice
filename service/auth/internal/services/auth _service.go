@@ -93,7 +93,7 @@ func (a *AuthServiceImpl) Login(ctx context.Context, req *pb.LoginRequest, role 
 			return fmt.Errorf("Failed to create auth session")
 		}
 		userAuth = pb.LoginResponse{
-			User: &pb.User{
+			User: &pb.AuthUser{
 				Username:   user.Username,
 				FullName:   user.FullName,
 				Email:      user.Email,
@@ -165,7 +165,7 @@ func (a *AuthServiceImpl) Register(ctx context.Context, req *pb.RegisterRequest,
 		}
 
 		userAuth = pb.RegisterResponse{
-			User: &pb.User{
+			User: &pb.AuthUser{
 				Username:   user.Username,
 				FullName:   user.FullName,
 				Email:      user.Email,

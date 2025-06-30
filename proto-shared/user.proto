@@ -9,7 +9,7 @@ import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 
 
-option go_package = "e-commerce-microservice/user/internal/pb";
+option go_package = "e-commerce-microservice/proto-shared/gen/pb";
 
 // =========================
 // MESSAGE DEFINITIONS
