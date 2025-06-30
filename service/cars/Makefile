@@ -21,9 +21,9 @@ rm_pb:
 proto:	
 	protoc --go_out=. --go-grpc_out=. ./internal/pb/cars.proto
 
-user_server:
+car_server:
 	go run cmd/main.go
 
 
 
-.PHONY: migrateup migratedown migrateup1 migratedown1 new_migration user_server proto rm_pb
+.PHONY: migrateup migratedown migrateup1 migratedown1 new_migration car_server proto rm_pb
