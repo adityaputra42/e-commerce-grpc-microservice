@@ -3,10 +3,13 @@ syntax = "proto3";
 package user;
 
 
+
+import "google/api/annotations.proto";
+
 import "google/protobuf/timestamp.proto";
 
 
-option go_package = "./internal/pb";
+option go_package = "e-commerce-microservice/user/internal/pb";
 
 // =========================
 // MESSAGE DEFINITIONS
@@ -102,10 +105,35 @@ message EmptyResponse {}
 // =========================
 
 service UserService {
-  rpc CreateUser(CreateUserRequest) returns (UserResponse);
-  rpc GetUser(GetUserRequest) returns (UserResponse);
+  rpc CreateUser(CreateUserRequest) returns (UserResponse) {
+      option (google.api.http) = {
+           post: "/v1/user/create"
+           body: "*"
+         };
+  }
+  rpc GetUser(GetUserRequest) returns (UserResponse) {
+      option (google.api.http) = {
+           get: "/v1/user/me"
+         };
+  }
 
-  rpc CreateAddress(CreateAddressRequest) returns (UserAddressResponse);
-  rpc UpdateAddress(UpdateAddressRequest) returns (UserAddressResponse);
-  rpc GetAddresses(GetUserAddressesRequest) returns (UserAddressesResponse);
+  rpc CreateAddress(CreateAddressRequest) returns (UserAddressResponse) {
+      option (google.api.http) = {
+           post: "/v1/user/address/create"
+           body: "*"
+         };
+  
+  }
+  rpc UpdateAddress(UpdateAddressRequest) returns (UserAddressResponse){
+       option (google.api.http) = {
+           post: "/v1/user/address/update"
+           body: "*"
+         };
+  
+  }
+  rpc GetAddresses(GetUserAddressesRequest) returns (UserAddressesResponse){
+     option (google.api.http) = {
+           get: "/v1/user/addressess"
+         };
+  }
 }

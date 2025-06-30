@@ -2,11 +2,12 @@
 // versions:
 // 	protoc-gen-go v1.36.6
 // 	protoc        v3.21.12
-// source: internal/pb/cars.proto
+// source: cars.proto
 
 package pb
 
 import (
+	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
@@ -46,7 +47,7 @@ type Car struct {
 
 func (x *Car) Reset() {
 	*x = Car{}
-	mi := &file_internal_pb_cars_proto_msgTypes[0]
+	mi := &file_cars_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -58,7 +59,7 @@ func (x *Car) String() string {
 func (*Car) ProtoMessage() {}
 
 func (x *Car) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_pb_cars_proto_msgTypes[0]
+	mi := &file_cars_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -71,7 +72,7 @@ func (x *Car) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Car.ProtoReflect.Descriptor instead.
 func (*Car) Descriptor() ([]byte, []int) {
-	return file_internal_pb_cars_proto_rawDescGZIP(), []int{0}
+	return file_cars_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *Car) GetId() string {
@@ -206,7 +207,7 @@ type CreateCarRequest struct {
 
 func (x *CreateCarRequest) Reset() {
 	*x = CreateCarRequest{}
-	mi := &file_internal_pb_cars_proto_msgTypes[1]
+	mi := &file_cars_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -218,7 +219,7 @@ func (x *CreateCarRequest) String() string {
 func (*CreateCarRequest) ProtoMessage() {}
 
 func (x *CreateCarRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_pb_cars_proto_msgTypes[1]
+	mi := &file_cars_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -231,7 +232,7 @@ func (x *CreateCarRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateCarRequest.ProtoReflect.Descriptor instead.
 func (*CreateCarRequest) Descriptor() ([]byte, []int) {
-	return file_internal_pb_cars_proto_rawDescGZIP(), []int{1}
+	return file_cars_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *CreateCarRequest) GetName() string {
@@ -340,7 +341,7 @@ type UpdateCarRequest struct {
 
 func (x *UpdateCarRequest) Reset() {
 	*x = UpdateCarRequest{}
-	mi := &file_internal_pb_cars_proto_msgTypes[2]
+	mi := &file_cars_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -352,7 +353,7 @@ func (x *UpdateCarRequest) String() string {
 func (*UpdateCarRequest) ProtoMessage() {}
 
 func (x *UpdateCarRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_pb_cars_proto_msgTypes[2]
+	mi := &file_cars_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -365,7 +366,7 @@ func (x *UpdateCarRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateCarRequest.ProtoReflect.Descriptor instead.
 func (*UpdateCarRequest) Descriptor() ([]byte, []int) {
-	return file_internal_pb_cars_proto_rawDescGZIP(), []int{2}
+	return file_cars_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *UpdateCarRequest) GetId() string {
@@ -475,7 +476,7 @@ type GetCarRequest struct {
 
 func (x *GetCarRequest) Reset() {
 	*x = GetCarRequest{}
-	mi := &file_internal_pb_cars_proto_msgTypes[3]
+	mi := &file_cars_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -487,7 +488,7 @@ func (x *GetCarRequest) String() string {
 func (*GetCarRequest) ProtoMessage() {}
 
 func (x *GetCarRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_pb_cars_proto_msgTypes[3]
+	mi := &file_cars_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -500,7 +501,7 @@ func (x *GetCarRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetCarRequest.ProtoReflect.Descriptor instead.
 func (*GetCarRequest) Descriptor() ([]byte, []int) {
-	return file_internal_pb_cars_proto_rawDescGZIP(), []int{3}
+	return file_cars_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *GetCarRequest) GetId() string {
@@ -519,7 +520,7 @@ type DeleteCarRequest struct {
 
 func (x *DeleteCarRequest) Reset() {
 	*x = DeleteCarRequest{}
-	mi := &file_internal_pb_cars_proto_msgTypes[4]
+	mi := &file_cars_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -531,7 +532,7 @@ func (x *DeleteCarRequest) String() string {
 func (*DeleteCarRequest) ProtoMessage() {}
 
 func (x *DeleteCarRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_pb_cars_proto_msgTypes[4]
+	mi := &file_cars_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -544,7 +545,7 @@ func (x *DeleteCarRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteCarRequest.ProtoReflect.Descriptor instead.
 func (*DeleteCarRequest) Descriptor() ([]byte, []int) {
-	return file_internal_pb_cars_proto_rawDescGZIP(), []int{4}
+	return file_cars_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *DeleteCarRequest) GetId() string {
@@ -569,7 +570,7 @@ type ListCarsRequest struct {
 
 func (x *ListCarsRequest) Reset() {
 	*x = ListCarsRequest{}
-	mi := &file_internal_pb_cars_proto_msgTypes[5]
+	mi := &file_cars_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -581,7 +582,7 @@ func (x *ListCarsRequest) String() string {
 func (*ListCarsRequest) ProtoMessage() {}
 
 func (x *ListCarsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_pb_cars_proto_msgTypes[5]
+	mi := &file_cars_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -594,7 +595,7 @@ func (x *ListCarsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListCarsRequest.ProtoReflect.Descriptor instead.
 func (*ListCarsRequest) Descriptor() ([]byte, []int) {
-	return file_internal_pb_cars_proto_rawDescGZIP(), []int{5}
+	return file_cars_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *ListCarsRequest) GetLimit() int32 {
@@ -655,7 +656,7 @@ type CarResponse struct {
 
 func (x *CarResponse) Reset() {
 	*x = CarResponse{}
-	mi := &file_internal_pb_cars_proto_msgTypes[6]
+	mi := &file_cars_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -667,7 +668,7 @@ func (x *CarResponse) String() string {
 func (*CarResponse) ProtoMessage() {}
 
 func (x *CarResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_pb_cars_proto_msgTypes[6]
+	mi := &file_cars_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -680,7 +681,7 @@ func (x *CarResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CarResponse.ProtoReflect.Descriptor instead.
 func (*CarResponse) Descriptor() ([]byte, []int) {
-	return file_internal_pb_cars_proto_rawDescGZIP(), []int{6}
+	return file_cars_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *CarResponse) GetCar() *Car {
@@ -700,7 +701,7 @@ type ListCarsResponse struct {
 
 func (x *ListCarsResponse) Reset() {
 	*x = ListCarsResponse{}
-	mi := &file_internal_pb_cars_proto_msgTypes[7]
+	mi := &file_cars_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -712,7 +713,7 @@ func (x *ListCarsResponse) String() string {
 func (*ListCarsResponse) ProtoMessage() {}
 
 func (x *ListCarsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_pb_cars_proto_msgTypes[7]
+	mi := &file_cars_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -725,7 +726,7 @@ func (x *ListCarsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListCarsResponse.ProtoReflect.Descriptor instead.
 func (*ListCarsResponse) Descriptor() ([]byte, []int) {
-	return file_internal_pb_cars_proto_rawDescGZIP(), []int{7}
+	return file_cars_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *ListCarsResponse) GetCars() []*Car {
@@ -751,7 +752,7 @@ type DeleteCarResponse struct {
 
 func (x *DeleteCarResponse) Reset() {
 	*x = DeleteCarResponse{}
-	mi := &file_internal_pb_cars_proto_msgTypes[8]
+	mi := &file_cars_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -763,7 +764,7 @@ func (x *DeleteCarResponse) String() string {
 func (*DeleteCarResponse) ProtoMessage() {}
 
 func (x *DeleteCarResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_pb_cars_proto_msgTypes[8]
+	mi := &file_cars_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -776,7 +777,7 @@ func (x *DeleteCarResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteCarResponse.ProtoReflect.Descriptor instead.
 func (*DeleteCarResponse) Descriptor() ([]byte, []int) {
-	return file_internal_pb_cars_proto_rawDescGZIP(), []int{8}
+	return file_cars_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *DeleteCarResponse) GetMessage() string {
@@ -786,11 +787,12 @@ func (x *DeleteCarResponse) GetMessage() string {
 	return ""
 }
 
-var File_internal_pb_cars_proto protoreflect.FileDescriptor
+var File_cars_proto protoreflect.FileDescriptor
 
-const file_internal_pb_cars_proto_rawDesc = "" +
+const file_cars_proto_rawDesc = "" +
 	"\n" +
-	"\x16internal/pb/cars.proto\x12\x04user\x1a\x1fgoogle/protobuf/timestamp.proto\"\xdb\x03\n" +
+	"\n" +
+	"cars.proto\x12\x04cars\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xdb\x03\n" +
 	"\x03Car\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x14\n" +
@@ -854,60 +856,61 @@ const file_internal_pb_cars_proto_rawDesc = "" +
 	"\bcurrency\x18\x06 \x01(\tR\bcurrency\x12\x17\n" +
 	"\ais_sold\x18\a \x01(\bR\x06isSold\"*\n" +
 	"\vCarResponse\x12\x1b\n" +
-	"\x03car\x18\x01 \x01(\v2\t.user.CarR\x03car\"G\n" +
+	"\x03car\x18\x01 \x01(\v2\t.cars.CarR\x03car\"G\n" +
 	"\x10ListCarsResponse\x12\x1d\n" +
-	"\x04cars\x18\x01 \x03(\v2\t.user.CarR\x04cars\x12\x14\n" +
+	"\x04cars\x18\x01 \x03(\v2\t.cars.CarR\x04cars\x12\x14\n" +
 	"\x05total\x18\x02 \x01(\x05R\x05total\"-\n" +
 	"\x11DeleteCarResponse\x12\x18\n" +
-	"\amessage\x18\x01 \x01(\tR\amessage2\xa7\x02\n" +
+	"\amessage\x18\x01 \x01(\tR\amessage2\x9c\x03\n" +
 	"\n" +
-	"CarService\x126\n" +
-	"\tCreateCar\x12\x16.user.CreateCarRequest\x1a\x11.user.CarResponse\x120\n" +
-	"\x06GetCar\x12\x13.user.GetCarRequest\x1a\x11.user.CarResponse\x129\n" +
-	"\bListCars\x12\x15.user.ListCarsRequest\x1a\x16.user.ListCarsResponse\x126\n" +
-	"\tUpdateCar\x12\x16.user.UpdateCarRequest\x1a\x11.user.CarResponse\x12<\n" +
-	"\tDeleteCar\x12\x16.user.DeleteCarRequest\x1a\x17.user.DeleteCarResponseB\x0fZ\r./internal/pbb\x06proto3"
+	"CarService\x12Q\n" +
+	"\tCreateCar\x12\x16.cars.CreateCarRequest\x1a\x11.cars.CarResponse\"\x19\x82\xd3\xe4\x93\x02\x13:\x01*\"\x0e/v1/car/create\x12G\n" +
+	"\x06GetCar\x12\x13.cars.GetCarRequest\x1a\x11.cars.CarResponse\"\x15\x82\xd3\xe4\x93\x02\x0f\x12\r/v1/cars/{id}\x12K\n" +
+	"\bListCars\x12\x15.cars.ListCarsRequest\x1a\x16.cars.ListCarsResponse\"\x10\x82\xd3\xe4\x93\x02\n" +
+	"\x12\b/v1/cars\x12Q\n" +
+	"\tUpdateCar\x12\x16.cars.UpdateCarRequest\x1a\x11.cars.CarResponse\"\x19\x82\xd3\xe4\x93\x02\x13:\x01*\"\x0e/v1/car/update\x12R\n" +
+	"\tDeleteCar\x12\x16.cars.DeleteCarRequest\x1a\x17.cars.DeleteCarResponse\"\x14\x82\xd3\xe4\x93\x02\x0e*\f/v1/car/{id}B*Z(e-commerce-microservice/cars/internal/pbb\x06proto3"
 
 var (
-	file_internal_pb_cars_proto_rawDescOnce sync.Once
-	file_internal_pb_cars_proto_rawDescData []byte
+	file_cars_proto_rawDescOnce sync.Once
+	file_cars_proto_rawDescData []byte
 )
 
-func file_internal_pb_cars_proto_rawDescGZIP() []byte {
-	file_internal_pb_cars_proto_rawDescOnce.Do(func() {
-		file_internal_pb_cars_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_internal_pb_cars_proto_rawDesc), len(file_internal_pb_cars_proto_rawDesc)))
+func file_cars_proto_rawDescGZIP() []byte {
+	file_cars_proto_rawDescOnce.Do(func() {
+		file_cars_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_cars_proto_rawDesc), len(file_cars_proto_rawDesc)))
 	})
-	return file_internal_pb_cars_proto_rawDescData
+	return file_cars_proto_rawDescData
 }
 
-var file_internal_pb_cars_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
-var file_internal_pb_cars_proto_goTypes = []any{
-	(*Car)(nil),                   // 0: user.Car
-	(*CreateCarRequest)(nil),      // 1: user.CreateCarRequest
-	(*UpdateCarRequest)(nil),      // 2: user.UpdateCarRequest
-	(*GetCarRequest)(nil),         // 3: user.GetCarRequest
-	(*DeleteCarRequest)(nil),      // 4: user.DeleteCarRequest
-	(*ListCarsRequest)(nil),       // 5: user.ListCarsRequest
-	(*CarResponse)(nil),           // 6: user.CarResponse
-	(*ListCarsResponse)(nil),      // 7: user.ListCarsResponse
-	(*DeleteCarResponse)(nil),     // 8: user.DeleteCarResponse
+var file_cars_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
+var file_cars_proto_goTypes = []any{
+	(*Car)(nil),                   // 0: cars.Car
+	(*CreateCarRequest)(nil),      // 1: cars.CreateCarRequest
+	(*UpdateCarRequest)(nil),      // 2: cars.UpdateCarRequest
+	(*GetCarRequest)(nil),         // 3: cars.GetCarRequest
+	(*DeleteCarRequest)(nil),      // 4: cars.DeleteCarRequest
+	(*ListCarsRequest)(nil),       // 5: cars.ListCarsRequest
+	(*CarResponse)(nil),           // 6: cars.CarResponse
+	(*ListCarsResponse)(nil),      // 7: cars.ListCarsResponse
+	(*DeleteCarResponse)(nil),     // 8: cars.DeleteCarResponse
 	(*timestamppb.Timestamp)(nil), // 9: google.protobuf.Timestamp
 }
-var file_internal_pb_cars_proto_depIdxs = []int32{
-	9, // 0: user.Car.created_at:type_name -> google.protobuf.Timestamp
-	9, // 1: user.Car.updated_at:type_name -> google.protobuf.Timestamp
-	0, // 2: user.CarResponse.car:type_name -> user.Car
-	0, // 3: user.ListCarsResponse.cars:type_name -> user.Car
-	1, // 4: user.CarService.CreateCar:input_type -> user.CreateCarRequest
-	3, // 5: user.CarService.GetCar:input_type -> user.GetCarRequest
-	5, // 6: user.CarService.ListCars:input_type -> user.ListCarsRequest
-	2, // 7: user.CarService.UpdateCar:input_type -> user.UpdateCarRequest
-	4, // 8: user.CarService.DeleteCar:input_type -> user.DeleteCarRequest
-	6, // 9: user.CarService.CreateCar:output_type -> user.CarResponse
-	6, // 10: user.CarService.GetCar:output_type -> user.CarResponse
-	7, // 11: user.CarService.ListCars:output_type -> user.ListCarsResponse
-	6, // 12: user.CarService.UpdateCar:output_type -> user.CarResponse
-	8, // 13: user.CarService.DeleteCar:output_type -> user.DeleteCarResponse
+var file_cars_proto_depIdxs = []int32{
+	9, // 0: cars.Car.created_at:type_name -> google.protobuf.Timestamp
+	9, // 1: cars.Car.updated_at:type_name -> google.protobuf.Timestamp
+	0, // 2: cars.CarResponse.car:type_name -> cars.Car
+	0, // 3: cars.ListCarsResponse.cars:type_name -> cars.Car
+	1, // 4: cars.CarService.CreateCar:input_type -> cars.CreateCarRequest
+	3, // 5: cars.CarService.GetCar:input_type -> cars.GetCarRequest
+	5, // 6: cars.CarService.ListCars:input_type -> cars.ListCarsRequest
+	2, // 7: cars.CarService.UpdateCar:input_type -> cars.UpdateCarRequest
+	4, // 8: cars.CarService.DeleteCar:input_type -> cars.DeleteCarRequest
+	6, // 9: cars.CarService.CreateCar:output_type -> cars.CarResponse
+	6, // 10: cars.CarService.GetCar:output_type -> cars.CarResponse
+	7, // 11: cars.CarService.ListCars:output_type -> cars.ListCarsResponse
+	6, // 12: cars.CarService.UpdateCar:output_type -> cars.CarResponse
+	8, // 13: cars.CarService.DeleteCar:output_type -> cars.DeleteCarResponse
 	9, // [9:14] is the sub-list for method output_type
 	4, // [4:9] is the sub-list for method input_type
 	4, // [4:4] is the sub-list for extension type_name
@@ -915,26 +918,26 @@ var file_internal_pb_cars_proto_depIdxs = []int32{
 	0, // [0:4] is the sub-list for field type_name
 }
 
-func init() { file_internal_pb_cars_proto_init() }
-func file_internal_pb_cars_proto_init() {
-	if File_internal_pb_cars_proto != nil {
+func init() { file_cars_proto_init() }
+func file_cars_proto_init() {
+	if File_cars_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_internal_pb_cars_proto_rawDesc), len(file_internal_pb_cars_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_cars_proto_rawDesc), len(file_cars_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   9,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_internal_pb_cars_proto_goTypes,
-		DependencyIndexes: file_internal_pb_cars_proto_depIdxs,
-		MessageInfos:      file_internal_pb_cars_proto_msgTypes,
+		GoTypes:           file_cars_proto_goTypes,
+		DependencyIndexes: file_cars_proto_depIdxs,
+		MessageInfos:      file_cars_proto_msgTypes,
 	}.Build()
-	File_internal_pb_cars_proto = out.File
-	file_internal_pb_cars_proto_goTypes = nil
-	file_internal_pb_cars_proto_depIdxs = nil
+	File_cars_proto = out.File
+	file_cars_proto_goTypes = nil
+	file_cars_proto_depIdxs = nil
 }

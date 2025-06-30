@@ -3,10 +3,13 @@ syntax = "proto3";
 package auth;
 
 
+
+import "google/api/annotations.proto";
+
 import "google/protobuf/timestamp.proto";
 
 
-option go_package = "./internal/pb";
+option go_package = "e-commerce-microservice/auth/internal/pb";
 
 
 // Message untuk user
@@ -89,10 +92,40 @@ message ConfirmEmailResponse {
 
 // ===== AuthService definition =====
 service AuthService {
-  rpc Register(RegisterRequest) returns (RegisterResponse);
-  rpc Login(LoginRequest) returns (LoginResponse);
-  rpc GoogleLogin(GoogleLoginRequest) returns (GoogleLoginResponse);
-  rpc RefreshToken(RefreshTokenRequest) returns (RefreshTokenResponse);
-  rpc SendVerificationEmail(VerifyEmailRequest) returns (VerifyEmailResponse);
-  rpc ConfirmEmail(ConfirmEmailRequest) returns (ConfirmEmailResponse);
+  rpc Register(RegisterRequest) returns (RegisterResponse){
+     option (google.api.http) = {
+           post: "/v1/auth/register"
+           body: "*"
+         };
+  }
+  rpc Login(LoginRequest) returns (LoginResponse){
+     option (google.api.http) = {
+           post: "/v1/auth/login"
+           body: "*"
+         };
+  }
+  rpc GoogleLogin(GoogleLoginRequest) returns (GoogleLoginResponse){
+     option (google.api.http) = {
+           post: "/v1/auth/google_login"
+           body: "*"
+         };
+  }
+  rpc RefreshToken(RefreshTokenRequest) returns (RefreshTokenResponse){
+    option (google.api.http) = {
+           post: "/v1/auth/refresh_token"
+           body: "*"
+         };
+  }
+  rpc SendVerificationEmail(VerifyEmailRequest) returns (VerifyEmailResponse){
+     option (google.api.http) = {
+           post: "/v1/auth/send_verification"
+           body: "*"
+         };
+  }
+  rpc ConfirmEmail(ConfirmEmailRequest) returns (ConfirmEmailResponse){
+     option (google.api.http) = {
+           post: "/v1/auth/confirm_email"
+           body: "*"
+         };
+  }
 }

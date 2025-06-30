@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.5.1
 // - protoc             v3.21.12
-// source: internal/pb/cars.proto
+// source: cars.proto
 
 package pb
 
@@ -19,11 +19,11 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	CarService_CreateCar_FullMethodName = "/user.CarService/CreateCar"
-	CarService_GetCar_FullMethodName    = "/user.CarService/GetCar"
-	CarService_ListCars_FullMethodName  = "/user.CarService/ListCars"
-	CarService_UpdateCar_FullMethodName = "/user.CarService/UpdateCar"
-	CarService_DeleteCar_FullMethodName = "/user.CarService/DeleteCar"
+	CarService_CreateCar_FullMethodName = "/cars.CarService/CreateCar"
+	CarService_GetCar_FullMethodName    = "/cars.CarService/GetCar"
+	CarService_ListCars_FullMethodName  = "/cars.CarService/ListCars"
+	CarService_UpdateCar_FullMethodName = "/cars.CarService/UpdateCar"
+	CarService_DeleteCar_FullMethodName = "/cars.CarService/DeleteCar"
 )
 
 // CarServiceClient is the client API for CarService service.
@@ -244,7 +244,7 @@ func _CarService_DeleteCar_Handler(srv interface{}, ctx context.Context, dec fun
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var CarService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "user.CarService",
+	ServiceName: "cars.CarService",
 	HandlerType: (*CarServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -269,5 +269,5 @@ var CarService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "internal/pb/cars.proto",
+	Metadata: "cars.proto",
 }

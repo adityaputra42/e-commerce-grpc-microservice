@@ -4,7 +4,7 @@ import (
 	"context"
 	"e-commerce-microservice/auth/internal/config"
 	"e-commerce-microservice/auth/internal/model"
-	"e-commerce-microservice/auth/internal/pb"
+	pb "e-commerce-microservice/auth/internal/pb"
 	"e-commerce-microservice/auth/internal/repository"
 	"e-commerce-microservice/auth/internal/token"
 	"e-commerce-microservice/auth/internal/utils"

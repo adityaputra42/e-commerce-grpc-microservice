@@ -2,7 +2,7 @@ package handler
 
 import (
 	"context"
-	"e-commerce-microservice/auth/internal/pb"
+	pb "e-commerce-microservice/auth/internal/pb"
 	"e-commerce-microservice/auth/internal/services"
 	"e-commerce-microservice/auth/internal/utils"
 	"e-commerce-microservice/auth/internal/val"

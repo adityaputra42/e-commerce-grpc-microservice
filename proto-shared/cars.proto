@@ -1,19 +1,42 @@
 syntax = "proto3";
 
-package user;
+package cars;
 
+import "google/api/annotations.proto";
 
 import "google/protobuf/timestamp.proto";
 
 
-option go_package = "./internal/pb";
+option go_package = "e-commerce-microservice/cars/internal/pb";
 
 service CarService {
-  rpc CreateCar(CreateCarRequest) returns (CarResponse);
-  rpc GetCar(GetCarRequest) returns (CarResponse);
-  rpc ListCars(ListCarsRequest) returns (ListCarsResponse);
-  rpc UpdateCar(UpdateCarRequest) returns (CarResponse);
-  rpc DeleteCar(DeleteCarRequest) returns (DeleteCarResponse);
+  rpc CreateCar(CreateCarRequest) returns (CarResponse){
+    option (google.api.http) = {
+           post: "/v1/car/create"
+           body: "*"
+         };
+  }
+  rpc GetCar(GetCarRequest) returns (CarResponse){
+     option (google.api.http) = {
+           get: "/v1/cars/{id}"
+         };
+  }
+  rpc ListCars(ListCarsRequest) returns (ListCarsResponse){
+        option (google.api.http) = {
+           get: "/v1/cars"
+         };
+  }
+  rpc UpdateCar(UpdateCarRequest) returns (CarResponse){
+        option (google.api.http) = {
+           post: "/v1/car/update"
+           body: "*"
+         };
+  }
+  rpc DeleteCar(DeleteCarRequest) returns (DeleteCarResponse) {
+     option (google.api.http) = {
+           delete: "/v1/car/{id}"
+         };
+  }
 }
 
 message Car {
