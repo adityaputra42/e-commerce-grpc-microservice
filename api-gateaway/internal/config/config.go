@@ -5,9 +5,14 @@ import (
 )
 
 type Configuration struct {
-	Environment    string   `mapstructure:"ENVIRONMENT"`
-	ServerAddress  string   `mapstructure:"HTTP_SERVER_ADDRESS"`
-	AllowedOrigins []string `mapstructure:"ALLOWED_ORIGINS"`
+	Environment          string   `mapstructure:"ENVIRONMENT"`
+	HttpServerAddress    string   `mapstructure:"HTTP_SERVER_ADDRESS"`
+	AuthServerAddress    string   `mapstructure:"AUTH_SERVER_ADDRESS"`
+	UserServerAddress    string   `mapstructure:"USER_SERVER_ADDRESS"`
+	CarsServerAddress    string   `mapstructure:"CARS_SERVER_ADDRESS"`
+	OrderServerAddress   string   `mapstructure:"ORDER_SERVER_ADDRESS"`
+	PaymentServerAddress string   `mapstructure:"PAYMENT_SERVER_ADDRESS"`
+	AllowedOrigins       []string `mapstructure:"ALLOWED_ORIGINS"`
 }
 
 var conf Configuration

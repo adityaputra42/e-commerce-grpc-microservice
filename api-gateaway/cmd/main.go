@@ -48,7 +48,7 @@ func runGatewayServer(
 	waitGroup *errgroup.Group,
 ) {
 
-	grpcMux := gateway.NewGatewayMux(ctx)
+	grpcMux := gateway.NewGatewayMux(ctx, config)
 
 	mux := http.NewServeMux()
 	mux.Handle("/", grpcMux)
@@ -74,7 +74,7 @@ func runGatewayServer(
 
 	httpServer := &http.Server{
 		Handler: handler,
-		Addr:    config.ServerAddress,
+		Addr:    config.HttpServerAddress,
 	}
 
 	waitGroup.Go(func() error {

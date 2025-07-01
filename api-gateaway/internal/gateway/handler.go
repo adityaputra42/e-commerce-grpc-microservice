@@ -2,6 +2,7 @@ package gateway
 
 import (
 	"context"
+	"e-commerce-microservice/api-gateway/internal/config"
 	"e-commerce-microservice/api-gateway/internal/pb"
 	"log"
 	"net/http"
@@ -11,24 +12,24 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-func NewGatewayMux(ctx context.Context) http.Handler {
+func NewGatewayMux(ctx context.Context, config config.Configuration) http.Handler {
 	mux := runtime.NewServeMux()
 
 	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
 
-	if err := pb.RegisterAuthServiceHandlerFromEndpoint(ctx, mux, "localhost:50051", opts); err != nil {
+	if err := pb.RegisterAuthServiceHandlerFromEndpoint(ctx, mux, config.AuthServerAddress, opts); err != nil {
 		log.Fatalf("cannot register auth service: %v", err)
 	}
 
-	if err := pb.RegisterUserServiceHandlerFromEndpoint(ctx, mux, "localhost:50052", opts); err != nil {
+	if err := pb.RegisterUserServiceHandlerFromEndpoint(ctx, mux, config.UserServerAddress, opts); err != nil {
 		log.Fatalf("cannot register user service: %v", err)
 	}
 
-	if err := pb.RegisterCarServiceHandlerFromEndpoint(ctx, mux, "localhost:50053", opts); err != nil {
+	if err := pb.RegisterCarServiceHandlerFromEndpoint(ctx, mux, config.CarsServerAddress, opts); err != nil {
 		log.Fatalf("cannot register car service: %v", err)
 	}
 
-	if err := pb.RegisterOrderServiceHandlerFromEndpoint(ctx, mux, "localhost:50054", opts); err != nil {
+	if err := pb.RegisterOrderServiceHandlerFromEndpoint(ctx, mux, config.OrderServerAddress, opts); err != nil {
 		log.Fatalf("cannot register car service: %v", err)
 	}
 
