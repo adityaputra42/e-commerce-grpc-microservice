@@ -9,7 +9,8 @@ proto:
 		--grpc-gateway_out=$(OUT_DIR) --grpc-gateway_opt=paths=source_relative \
 		$(PROTO_DIR)/auth.proto \
 		$(PROTO_DIR)/user.proto \
-		$(PROTO_DIR)/cars.proto 
+		$(PROTO_DIR)/cars.proto \
+		$(PROTO_DIR)/order.proto 
 
 gateaway_server:
 	go run cmd/main.go

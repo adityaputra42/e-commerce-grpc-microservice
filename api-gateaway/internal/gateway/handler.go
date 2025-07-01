@@ -28,5 +28,9 @@ func NewGatewayMux(ctx context.Context) http.Handler {
 		log.Fatalf("cannot register car service: %v", err)
 	}
 
+	if err := pb.RegisterOrderServiceHandlerFromEndpoint(ctx, mux, "localhost:50054", opts); err != nil {
+		log.Fatalf("cannot register car service: %v", err)
+	}
+
 	return mux
 }
