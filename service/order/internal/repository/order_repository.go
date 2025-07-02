@@ -11,9 +11,9 @@ import (
 type OrderRepository interface {
 	GetOrder(ctx context.Context, id string) (*db.Order, error)
 	GetListOrder(ctx context.Context, req db.ListOrderParams) (*[]db.Order, error)
-	CreateOrder(ctx context.Context, req db.CreateOrderParams) (*db.Order, error)
+	CreateOrder(ctx context.Context, tx *db.Queries, req db.CreateOrderParams) (*db.Order, error)
 	DeleteOrder(ctx context.Context, id string) error
-	UpdateOrder(ctx context.Context, req db.UpdateOrderParams) (*db.Order, error)
+	UpdateOrder(ctx context.Context, tx *db.Queries, req db.UpdateOrderParams) (*db.Order, error)
 }
 
 type OrderRepositoryImpl struct {
@@ -21,9 +21,9 @@ type OrderRepositoryImpl struct {
 }
 
 // CreateOrder implements OrderRepository.
-func (o *OrderRepositoryImpl) CreateOrder(ctx context.Context, req db.CreateOrderParams) (*db.Order, error) {
+func (o *OrderRepositoryImpl) CreateOrder(ctx context.Context, tx *db.Queries, req db.CreateOrderParams) (*db.Order, error) {
 
-	result, err := o.q.CreateOrder(ctx, req)
+	result, err := tx.CreateOrder(ctx, req)
 	if err != nil {
 		return nil, fmt.Errorf("Failed to create order")
 	}
@@ -66,8 +66,8 @@ func (o *OrderRepositoryImpl) GetOrder(ctx context.Context, id string) (*db.Orde
 }
 
 // UpdaeOrder implements OrderRepository.
-func (o *OrderRepositoryImpl) UpdateOrder(ctx context.Context, req db.UpdateOrderParams) (*db.Order, error) {
-	result, err := o.q.UpdateOrder(ctx, req)
+func (o *OrderRepositoryImpl) UpdateOrder(ctx context.Context, tx *db.Queries, req db.UpdateOrderParams) (*db.Order, error) {
+	result, err := tx.UpdateOrder(ctx, req)
 	if err != nil {
 		return nil, fmt.Errorf("Failed to update order")
 	}

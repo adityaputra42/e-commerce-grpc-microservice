@@ -47,7 +47,7 @@ service OrderService {
 
 message Order {
   string id = 1;
-  string user_id = 2;
+  string username = 2;
   string car_id = 3;
   string status = 4;
   google.protobuf.Timestamp created_at = 5;
@@ -59,7 +59,7 @@ message OrderResponse {
 }
 
 message CreateOrderRequest {
-  string user_id = 1;
+  string username = 1;
   string car_id = 2;
 }
 
@@ -81,7 +81,7 @@ message DeleteOrderResponse {
 }
 
 message ListOrdersRequest {
-  string user_id = 1;
+  string username = 1;
   int32 page = 2;
   int32 page_size = 3;
 }
