@@ -33,6 +33,12 @@ service OrderService {
       body: "*"
     };
   }
+  rpc CancelOrder(CancelOrderRequest) returns (OrderResponse) {
+    option (google.api.http) = {
+      put: "/v1/orders/{id}/cancel"
+      body: "*"
+    };
+  }
 
   rpc DeleteOrder(DeleteOrderRequest) returns (DeleteOrderResponse) {
     option (google.api.http) = {
@@ -66,6 +72,10 @@ message CreateOrderRequest {
 message UpdateOrderRequest {
   string id = 1;
   string status = 2;
+}
+
+message CancelOrderRequest {
+  string id = 1;
 }
 
 message GetOrderRequest {
