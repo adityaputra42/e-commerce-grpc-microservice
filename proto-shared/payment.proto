@@ -1,0 +1,92 @@
+syntax = "proto3";
+
+package payment;
+
+option go_package = "e-commerce-microservice/proto-shared/gen/pb";
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+// =====================
+// Payment Service
+// =====================
+
+service PaymentService {
+  rpc CreatePayment(CreatePaymentRequest) returns (PaymentResponse) {
+    option (google.api.http) = {
+      post: "/v1/payments"
+      body: "*"
+    };
+  }
+
+  rpc GetPayment(GetPaymentRequest) returns (PaymentResponse) {
+    option (google.api.http) = {
+      get: "/v1/payments/{id}"
+    };
+  }
+
+  rpc UpdatePaymentStatus(UpdatePaymentStatusRequest) returns (PaymentResponse) {
+    option (google.api.http) = {
+      patch: "/v1/payments/{id}/status"
+      body: "*"
+    };
+  }
+
+  rpc ListPayments(ListPaymentsRequest) returns (ListPaymentsResponse) {
+    option (google.api.http) = {
+      get: "/v1/payments"
+    };
+  }
+}
+
+// =====================
+// Messages
+// =====================
+
+message Payment {
+  string id = 1;
+  string order_id = 2;
+  string username = 3;
+  string network = 4;           // solana, base, bnb
+  string currency = 5;          // SOL, ETH, BNB
+  string tx_hash = 6;
+  string wallet_address = 7;
+  string status = 8;            // pending, confirmed, failed
+  string amount = 9;            // bisa pakai string agar aman di JSON
+  google.protobuf.Timestamp created_at = 10;
+  google.protobuf.Timestamp updated_at = 11;
+}
+
+message CreatePaymentRequest {
+  string order_id = 1;
+  string username = 2;
+  string network = 3;
+  string currency = 4;
+  string wallet_address = 5;
+  string amount = 6;
+}
+
+message UpdatePaymentStatusRequest {
+  string id = 1;
+  string status = 2;
+  string tx_hash = 3;
+}
+
+message GetPaymentRequest {
+  string id = 1;
+}
+
+message PaymentResponse {
+  Payment payment = 1;
+}
+
+message ListPaymentsRequest {
+  string username = 1;
+  int32 page = 2;
+  int32 page_size = 3;
+}
+
+message ListPaymentsResponse {
+  repeated Payment payments = 1;
+  int32 total = 2;
+}

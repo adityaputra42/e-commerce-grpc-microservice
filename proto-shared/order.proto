@@ -67,6 +67,8 @@ message OrderResponse {
 message CreateOrderRequest {
   string username = 1;
   string car_id = 2;
+  string network = 4;           // solana, base, bnb
+  string currency = 5;   
 }
 
 message UpdateOrderRequest {

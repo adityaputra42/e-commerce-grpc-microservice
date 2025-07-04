@@ -155,6 +155,8 @@ type CreateOrderRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Username      string                 `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"`
 	CarId         string                 `protobuf:"bytes,2,opt,name=car_id,json=carId,proto3" json:"car_id,omitempty"`
+	Network       string                 `protobuf:"bytes,4,opt,name=network,proto3" json:"network,omitempty"` // solana, base, bnb
+	Currency      string                 `protobuf:"bytes,5,opt,name=currency,proto3" json:"currency,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -199,6 +201,20 @@ func (x *CreateOrderRequest) GetUsername() string {
 func (x *CreateOrderRequest) GetCarId() string {
 	if x != nil {
 		return x.CarId
+	}
+	return ""
+}
+
+func (x *CreateOrderRequest) GetNetwork() string {
+	if x != nil {
+		return x.Network
+	}
+	return ""
+}
+
+func (x *CreateOrderRequest) GetCurrency() string {
+	if x != nil {
+		return x.Currency
 	}
 	return ""
 }
@@ -558,10 +574,12 @@ const file_order_proto_rawDesc = "" +
 	"\n" +
 	"updated_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"3\n" +
 	"\rOrderResponse\x12\"\n" +
-	"\x05order\x18\x01 \x01(\v2\f.order.OrderR\x05order\"G\n" +
+	"\x05order\x18\x01 \x01(\v2\f.order.OrderR\x05order\"}\n" +
 	"\x12CreateOrderRequest\x12\x1a\n" +
 	"\busername\x18\x01 \x01(\tR\busername\x12\x15\n" +
-	"\x06car_id\x18\x02 \x01(\tR\x05carId\"<\n" +
+	"\x06car_id\x18\x02 \x01(\tR\x05carId\x12\x18\n" +
+	"\anetwork\x18\x04 \x01(\tR\anetwork\x12\x1a\n" +
+	"\bcurrency\x18\x05 \x01(\tR\bcurrency\"<\n" +
 	"\x12UpdateOrderRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x16\n" +
 	"\x06status\x18\x02 \x01(\tR\x06status\"$\n" +

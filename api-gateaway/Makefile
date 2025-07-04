@@ -10,7 +10,8 @@ proto:
 		$(PROTO_DIR)/auth.proto \
 		$(PROTO_DIR)/user.proto \
 		$(PROTO_DIR)/cars.proto \
-		$(PROTO_DIR)/order.proto 
+		$(PROTO_DIR)/order.proto \
+		$(PROTO_DIR)/payment.proto 
 
 gateaway_server:
 	go run cmd/main.go
