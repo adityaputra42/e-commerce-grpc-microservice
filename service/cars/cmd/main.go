@@ -80,14 +80,14 @@ func runGrpcServer(
 	}
 
 	waitGroup.Go(func() error {
-		log.Info().Msgf("start gRPC server at %s", listener.Addr().String())
+		log.Info().Msgf("start gRPC cars server at %s", listener.Addr().String())
 
 		err = grpcServer.Serve(listener)
 		if err != nil {
 			if errors.Is(err, grpc.ErrServerStopped) {
 				return nil
 			}
-			log.Error().Err(err).Msg("gRPC server failed to serve")
+			log.Error().Err(err).Msg("gRPC cars server failed to serve")
 			return err
 		}
 
@@ -96,10 +96,10 @@ func runGrpcServer(
 
 	waitGroup.Go(func() error {
 		<-ctx.Done()
-		log.Info().Msg("graceful shutdown gRPC server")
+		log.Info().Msg("graceful shutdown gRPC cars server")
 
 		grpcServer.GracefulStop()
-		log.Info().Msg("gRPC server is stopped")
+		log.Info().Msg("gRPC cars server is stopped")
 
 		return nil
 	})

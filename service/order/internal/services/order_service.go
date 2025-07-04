@@ -19,7 +19,7 @@ type OrdeService interface {
 	CreateOrder(ctx context.Context, req *pb.CreateOrderRequest) (*pb.OrderResponse, error)
 	UpdateOrder(ctx context.Context, req *pb.UpdateOrderRequest) (*pb.OrderResponse, error)
 	CancelOrder(ctx context.Context, req *pb.CancelOrderRequest) (*pb.OrderResponse, error)
-	DeleteOrder(ctx context.Context, req *pb.DeleteOrderRequest) *pb.DeleteOrderResponse
+	DeleteOrder(ctx context.Context, req *pb.DeleteOrderRequest) (*pb.DeleteOrderResponse, error)
 	FindOrderById(ctx context.Context, req *pb.GetOrderRequest) (*pb.OrderResponse, error)
 	FindAllOrder(ctx context.Context, req *pb.ListOrdersRequest) (*pb.ListOrdersResponse, error)
 }
@@ -123,21 +123,21 @@ func (o *OrdeServiceImpl) CreateOrder(ctx context.Context, req *pb.CreateOrderRe
 }
 
 // DeleteOrder implements OrdeService.
-func (o *OrdeServiceImpl) DeleteOrder(ctx context.Context, req *pb.DeleteOrderRequest) *pb.DeleteOrderResponse {
+func (o *OrdeServiceImpl) DeleteOrder(ctx context.Context, req *pb.DeleteOrderRequest) (*pb.DeleteOrderResponse, error) {
 
 	_, err := utils.AuthorizationUser(ctx, o.tokenMaker)
 
 	if err != nil {
-		return &pb.DeleteOrderResponse{Message: utils.UnauthenticatedError(err).Error()}
+		return &pb.DeleteOrderResponse{Message: utils.UnauthenticatedError(err).Error()}, utils.UnauthenticatedError(err)
 	}
 
 	err = o.repo.DeleteOrder(ctx, req.Id)
 
 	if err != nil {
-		return &pb.DeleteOrderResponse{Message: "failed to delete order"}
+		return &pb.DeleteOrderResponse{Message: "failed to delete order"}, fmt.Errorf("failed to delete order")
 	}
 
-	return &pb.DeleteOrderResponse{Message: "Success delete order"}
+	return &pb.DeleteOrderResponse{Message: "Success delete order"}, nil
 
 }
 

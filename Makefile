@@ -11,14 +11,16 @@ run_server:
 	cd service/auth && make auth_server &
 	cd service/user && make user_server &
 	cd service/cars && make car_server &
+	cd service/order && make order_server &
 
 run_services:
 	cd service/auth && make auth_server &
 	cd service/user && make user_server &
 	cd service/cars && make car_server &
+	cd service/order && make order_server &
 
 kill_ports:
-	@for port in 8080 50051 50052 50053; do \
+	@for port in 8080 50051 50052 50053 50054; do \
 		pid=$$(lsof -t -i :$$port); \
 		if [ -n "$$pid" ]; then \
 			echo "Killing process on port $$port (PID: $$pid)"; \

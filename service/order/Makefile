@@ -25,7 +25,7 @@ proto:
 		--go-grpc_out=$(OUT_DIR) --go-grpc_opt=paths=source_relative \
 		$(PROTO_FILE)
 
-user_server:
+order_server:
 	go run cmd/main.go
 
 
