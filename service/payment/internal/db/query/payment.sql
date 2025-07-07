@@ -2,7 +2,7 @@
 INSERT INTO payments (
   id,
   order_id,
-  user_id,
+  username,
   network,
   currency,
   amount,
@@ -32,6 +32,6 @@ RETURNING *;
 
 -- name: ListPaymentsByUser :many
 SELECT * FROM payments
-WHERE user_id = $1
+WHERE username = $1
 ORDER BY created_at DESC
 LIMIT $2 OFFSET $3;

@@ -16,7 +16,7 @@ const createPayment = `-- name: CreatePayment :one
 INSERT INTO payments (
   id,
   order_id,
-  user_id,
+  username,
   network,
   currency,
   amount,
@@ -26,26 +26,26 @@ INSERT INTO payments (
 ) VALUES (
   $1, $2, $3, $4, $5, $6, $7, $8, $9
 )
-RETURNING id, order_id, user_id, network, currency, amount, wallet_address, tx_hash, status, created_at, updated_at
+RETURNING id, order_id, username, network, currency, amount, wallet_address, tx_hash, status, created_at, updated_at
 `
 
 type CreatePaymentParams struct {
-	ID            uuid.UUID      `json:"id"`
-	OrderID       uuid.UUID      `json:"order_id"`
-	UserID        uuid.UUID      `json:"user_id"`
-	Network       string         `json:"network"`
-	Currency      string         `json:"currency"`
-	Amount        pgtype.Numeric `json:"amount"`
-	WalletAddress string         `json:"wallet_address"`
-	TxHash        pgtype.Text    `json:"tx_hash"`
-	Status        string         `json:"status"`
+	ID            uuid.UUID   `json:"id"`
+	OrderID       uuid.UUID   `json:"order_id"`
+	Username      string      `json:"username"`
+	Network       string      `json:"network"`
+	Currency      string      `json:"currency"`
+	Amount        float64     `json:"amount"`
+	WalletAddress string      `json:"wallet_address"`
+	TxHash        pgtype.Text `json:"tx_hash"`
+	Status        string      `json:"status"`
 }
 
 func (q *Queries) CreatePayment(ctx context.Context, arg CreatePaymentParams) (Payment, error) {
 	row := q.db.QueryRow(ctx, createPayment,
 		arg.ID,
 		arg.OrderID,
-		arg.UserID,
+		arg.Username,
 		arg.Network,
 		arg.Currency,
 		arg.Amount,
@@ -57,7 +57,7 @@ func (q *Queries) CreatePayment(ctx context.Context, arg CreatePaymentParams) (P
 	err := row.Scan(
 		&i.ID,
 		&i.OrderID,
-		&i.UserID,
+		&i.Username,
 		&i.Network,
 		&i.Currency,
 		&i.Amount,
@@ -71,7 +71,7 @@ func (q *Queries) CreatePayment(ctx context.Context, arg CreatePaymentParams) (P
 }
 
 const getPayment = `-- name: GetPayment :one
-SELECT id, order_id, user_id, network, currency, amount, wallet_address, tx_hash, status, created_at, updated_at FROM payments
+SELECT id, order_id, username, network, currency, amount, wallet_address, tx_hash, status, created_at, updated_at FROM payments
 WHERE id = $1
 `
 
@@ -81,7 +81,7 @@ func (q *Queries) GetPayment(ctx context.Context, id uuid.UUID) (Payment, error)
 	err := row.Scan(
 		&i.ID,
 		&i.OrderID,
-		&i.UserID,
+		&i.Username,
 		&i.Network,
 		&i.Currency,
 		&i.Amount,
@@ -95,7 +95,7 @@ func (q *Queries) GetPayment(ctx context.Context, id uuid.UUID) (Payment, error)
 }
 
 const getPaymentByTxHash = `-- name: GetPaymentByTxHash :one
-SELECT id, order_id, user_id, network, currency, amount, wallet_address, tx_hash, status, created_at, updated_at FROM payments
+SELECT id, order_id, username, network, currency, amount, wallet_address, tx_hash, status, created_at, updated_at FROM payments
 WHERE tx_hash = $1
 `
 
@@ -105,7 +105,7 @@ func (q *Queries) GetPaymentByTxHash(ctx context.Context, txHash pgtype.Text) (P
 	err := row.Scan(
 		&i.ID,
 		&i.OrderID,
-		&i.UserID,
+		&i.Username,
 		&i.Network,
 		&i.Currency,
 		&i.Amount,
@@ -119,20 +119,20 @@ func (q *Queries) GetPaymentByTxHash(ctx context.Context, txHash pgtype.Text) (P
 }
 
 const listPaymentsByUser = `-- name: ListPaymentsByUser :many
-SELECT id, order_id, user_id, network, currency, amount, wallet_address, tx_hash, status, created_at, updated_at FROM payments
-WHERE user_id = $1
+SELECT id, order_id, username, network, currency, amount, wallet_address, tx_hash, status, created_at, updated_at FROM payments
+WHERE username = $1
 ORDER BY created_at DESC
 LIMIT $2 OFFSET $3
 `
 
 type ListPaymentsByUserParams struct {
-	UserID uuid.UUID `json:"user_id"`
-	Limit  int32     `json:"limit"`
-	Offset int32     `json:"offset"`
+	Username string `json:"username"`
+	Limit    int32  `json:"limit"`
+	Offset   int32  `json:"offset"`
 }
 
 func (q *Queries) ListPaymentsByUser(ctx context.Context, arg ListPaymentsByUserParams) ([]Payment, error) {
-	rows, err := q.db.Query(ctx, listPaymentsByUser, arg.UserID, arg.Limit, arg.Offset)
+	rows, err := q.db.Query(ctx, listPaymentsByUser, arg.Username, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
@@ -143,7 +143,7 @@ func (q *Queries) ListPaymentsByUser(ctx context.Context, arg ListPaymentsByUser
 		if err := rows.Scan(
 			&i.ID,
 			&i.OrderID,
-			&i.UserID,
+			&i.Username,
 			&i.Network,
 			&i.Currency,
 			&i.Amount,
@@ -169,7 +169,7 @@ SET status = $2,
     tx_hash = COALESCE($3, tx_hash),
     updated_at = now()
 WHERE id = $1
-RETURNING id, order_id, user_id, network, currency, amount, wallet_address, tx_hash, status, created_at, updated_at
+RETURNING id, order_id, username, network, currency, amount, wallet_address, tx_hash, status, created_at, updated_at
 `
 
 type UpdatePaymentStatusParams struct {
@@ -184,7 +184,7 @@ func (q *Queries) UpdatePaymentStatus(ctx context.Context, arg UpdatePaymentStat
 	err := row.Scan(
 		&i.ID,
 		&i.OrderID,
-		&i.UserID,
+		&i.Username,
 		&i.Network,
 		&i.Currency,
 		&i.Amount,

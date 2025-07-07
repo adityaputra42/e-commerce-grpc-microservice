@@ -11,10 +11,10 @@ CREATE TABLE payment_wallets (
 CREATE TABLE payments (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     order_id UUID NOT NULL,
-    user_id UUID NOT NULL,
+    username varchar(100) NOT NULL,
     network TEXT NOT NULL,                -- contoh: 'solana'
     currency TEXT NOT NULL,               -- contoh: 'USDT'
-    amount NUMERIC NOT NULL,              -- jumlah yang dibayar
+    amount double precision NOT NULL,              -- jumlah yang dibayar
     wallet_address TEXT NOT NULL,         -- tujuan transfer (diambil dari payment_wallets)
     tx_hash TEXT UNIQUE,                  -- hash transaksi dari blockchain
     status TEXT NOT NULL DEFAULT 'pending', -- pending, confirmed, failed

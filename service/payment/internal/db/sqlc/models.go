@@ -12,10 +12,10 @@ import (
 type Payment struct {
 	ID            uuid.UUID          `json:"id"`
 	OrderID       uuid.UUID          `json:"order_id"`
-	UserID        uuid.UUID          `json:"user_id"`
+	Username      string             `json:"username"`
 	Network       string             `json:"network"`
 	Currency      string             `json:"currency"`
-	Amount        pgtype.Numeric     `json:"amount"`
+	Amount        float64            `json:"amount"`
 	WalletAddress string             `json:"wallet_address"`
 	TxHash        pgtype.Text        `json:"tx_hash"`
 	Status        string             `json:"status"`
