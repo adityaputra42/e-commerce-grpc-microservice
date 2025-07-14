@@ -11,7 +11,8 @@ proto:
 		$(PROTO_DIR)/user.proto \
 		$(PROTO_DIR)/cars.proto \
 		$(PROTO_DIR)/order.proto \
-		$(PROTO_DIR)/payment.proto 
+		$(PROTO_DIR)/payment.proto \
+		$(PROTO_DIR)/payment_wallet.proto 
 
 gateaway_server:
 	go run cmd/main.go

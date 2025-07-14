@@ -1,6 +1,7 @@
 DB_URL=postgresql://root:root@localhost:5432/ecommerce_microservice?sslmode=disable
 PROTO_DIR=../../proto-shared
-PROTO_FILE=$(PROTO_DIR)/payment.proto
+PROTO_FILE=$(PROTO_DIR)/payment.proto \
+$(PROTO_DIR)/payment_wallet.proto
 OUT_DIR=./internal/pb
 
 migrateup:

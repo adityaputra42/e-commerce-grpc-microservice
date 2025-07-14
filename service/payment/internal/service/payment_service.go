@@ -19,7 +19,6 @@ type PaymentService interface {
 	FingPaymentById(ctx context.Context, req *pb.GetPaymentRequest) (*pb.PaymentResponse, error)
 	FindAllPayment(ctx context.Context, req *pb.ListPaymentsRequest) (*pb.ListPaymentsResponse, error)
 	CreatePayment(ctx context.Context, req *pb.CreatePaymentRequest) (*pb.PaymentResponse, error)
-
 	UpdatePayment(ctx context.Context, req *pb.UpdatePaymentStatusRequest) (*pb.PaymentResponse, error)
 }
 type PaymentServiceImpl struct {
@@ -42,7 +41,7 @@ func (p *PaymentServiceImpl) CreatePayment(ctx context.Context, req *pb.CreatePa
 		}
 		orderId, err := uuid.Parse(req.GetOrderId())
 		if err != nil {
-			return fmt.Errorf("invalid Order ID: %s", err)
+			return fmt.Errorf("invalid payment ID: %s", err)
 		}
 
 		amount, err := strconv.ParseFloat(req.Amount, 64)
@@ -59,7 +58,7 @@ func (p *PaymentServiceImpl) CreatePayment(ctx context.Context, req *pb.CreatePa
 		}
 		result, err := p.repo.CreatePayment(ctx, tx, param)
 		if err != nil {
-			return fmt.Errorf("failed to create order: %s", err)
+			return fmt.Errorf("failed to create payment: %s", err)
 		}
 
 		response = pb.PaymentResponse{
@@ -181,7 +180,7 @@ func (p *PaymentServiceImpl) UpdatePayment(ctx context.Context, req *pb.UpdatePa
 		payment, err := p.repo.FingPaymentById(ctx, req.Id)
 
 		if err != nil {
-			return fmt.Errorf("order not found")
+			return fmt.Errorf("payment not found")
 		}
 		request := db.UpdatePaymentStatusParams{
 			ID:     payment.ID,

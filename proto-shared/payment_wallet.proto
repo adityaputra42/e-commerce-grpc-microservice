@@ -1,0 +1,90 @@
+syntax = "proto3";
+
+package paymentwallet;
+
+
+option go_package = "e-commerce-microservice/proto-shared/gen/pb";
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+// =====================
+// Service: PaymentWalletService
+// =====================
+service PaymentWalletService {
+  rpc CreatePaymentWallet(CreatePaymentWalletRequest) returns (PaymentWalletResponse) {
+    option (google.api.http) = {
+      post: "/v1/payment-wallets"
+      body: "*"
+    };
+  }
+
+  rpc ListPaymentWallets(ListPaymentWalletsRequest) returns (ListPaymentWalletsResponse) {
+    option (google.api.http) = {
+      get: "/v1/payment-wallets"
+    };
+  }
+  rpc GetPaymentWallets(GetPaymentWalletRequest) returns (PaymentWalletResponse) {
+    option (google.api.http) = {
+      get: "/v1/payment-wallets/{network}"
+    };
+  }
+
+  rpc UpdatePaymentWallet(UpdatePaymentWalletRequest) returns (PaymentWalletResponse) {
+    option (google.api.http) = {
+      put: "/v1/payment-wallets/{network}"
+      body: "*"
+    };
+  }
+
+  rpc DeletePaymentWallet(DeletePaymentWalletRequest) returns (DeletePaymentWalletResponse) {
+    option (google.api.http) = {
+      delete: "/v1/payment-wallets/{network}"
+    };
+  }
+}
+
+// =====================
+// Messages
+// =====================
+
+message PaymentWallet {
+  int32 id = 1;
+  string network = 2;
+  string wallet_address = 3;
+  google.protobuf.Timestamp created_at = 4;
+}
+
+message CreatePaymentWalletRequest {
+  string network = 1;
+  string wallet_address = 2;
+}
+
+
+message DeletePaymentWalletResponse {
+  string message = 1;
+}
+
+
+message ListPaymentWalletsRequest {}
+
+message ListPaymentWalletsResponse {
+  repeated PaymentWallet wallets = 1;
+}
+
+message UpdatePaymentWalletRequest {
+  string network = 1;
+  string wallet_address = 2;
+}
+
+message GetPaymentWalletRequest {
+  string network = 1;
+}
+
+message DeletePaymentWalletRequest {
+  string network = 1;
+}
+
+message PaymentWalletResponse {
+  PaymentWallet wallet = 1;
+}

@@ -8,6 +8,7 @@ import (
 
 type PaymentWalletRepository interface {
 	FindAllPaymentWallet(ctx context.Context) (*[]db.PaymentWallet, error)
+	FindPaymentWalletByNetwork(ctx context.Context, network string) (*db.PaymentWallet, error)
 	CreatePaymentWallet(ctx context.Context, tx *db.Queries, req db.CreatePaymentWalletParams) (*db.PaymentWallet, error)
 	DeletePaymentWallet(ctx context.Context, network string) error
 	UpdatePaymentWallet(ctx context.Context, tx *db.Queries, req db.UpdatePaymentWalletParams) (*db.PaymentWallet, error)
@@ -15,6 +16,15 @@ type PaymentWalletRepository interface {
 
 type PaymentWalletRepositoryImpl struct {
 	q *db.Queries
+}
+
+// FindPaymentWalletByNetwork implements PaymentWalletRepository.
+func (p *PaymentWalletRepositoryImpl) FindPaymentWalletByNetwork(ctx context.Context, network string) (*db.PaymentWallet, error) {
+	result, err := p.q.GetWalletAddressByNetwork(ctx, network)
+	if err != nil {
+		return nil, fmt.Errorf("Failed to Get payment wallet")
+	}
+	return &result, nil
 }
 
 // CreatePaymentWallet implements PaymentWalletRepository.
