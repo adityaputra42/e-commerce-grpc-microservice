@@ -30,7 +30,13 @@ func NewGatewayMux(ctx context.Context, config config.Configuration) http.Handle
 	}
 
 	if err := pb.RegisterOrderServiceHandlerFromEndpoint(ctx, mux, config.OrderServerAddress, opts); err != nil {
-		log.Fatalf("cannot register car service: %v", err)
+		log.Fatalf("cannot register order service: %v", err)
+	}
+	if err := pb.RegisterPaymentServiceHandlerFromEndpoint(ctx, mux, config.PaymentServerAddress, opts); err != nil {
+		log.Fatalf("cannot register payment service: %v", err)
+	}
+	if err := pb.RegisterPaymentWalletServiceHandlerFromEndpoint(ctx, mux, config.PaymentServerAddress, opts); err != nil {
+		log.Fatalf("cannot register payment wallet service: %v", err)
 	}
 
 	return mux
