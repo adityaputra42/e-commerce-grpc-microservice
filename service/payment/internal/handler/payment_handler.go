@@ -34,17 +34,45 @@ func (p *PaymentHandler) CreatePayment(ctx context.Context, req *pb.CreatePaymen
 
 // FindAllPayment implements PaymentInterface.
 func (p *PaymentHandler) FindAllPayment(ctx context.Context, req *pb.ListPaymentsRequest) (*pb.ListPaymentsResponse, error) {
-	panic("unimplemented")
+	violations := validateGetAll(req)
+	if violations != nil {
+		return nil, utils.InvalidArgumentError(violations)
+
+	}
+	res, err := p.service.FindAllPayment(ctx, req)
+	if err != nil {
+		status.Errorf(codes.Internal, "%s", err.Error())
+	}
+	return res, nil
 }
 
 // FingPaymentById implements PaymentInterface.
 func (p *PaymentHandler) FingPaymentById(ctx context.Context, req *pb.GetPaymentRequest) (*pb.PaymentResponse, error) {
-	panic("unimplemented")
+	violations := validateGetById(req)
+	if violations != nil {
+		return nil, utils.InvalidArgumentError(violations)
+
+	}
+	res, err := p.service.FingPaymentById(ctx, req)
+	if err != nil {
+		status.Errorf(codes.Internal, "%s", err.Error())
+	}
+	return res, nil
 }
 
 // UpdatePayment implements PaymentInterface.
 func (p *PaymentHandler) UpdatePayment(ctx context.Context, req *pb.UpdatePaymentStatusRequest) (*pb.PaymentResponse, error) {
-	panic("unimplemented")
+	violations := validateUpdatePayement(req)
+	if violations != nil {
+		return nil, utils.InvalidArgumentError(violations)
+
+	}
+	res, err := p.service.UpdatePayment(ctx, req)
+	if err != nil {
+		status.Errorf(codes.Internal, "%s", err.Error())
+	}
+
+	return res, nil
 }
 
 func NewPaymentHandler(Service service.PaymentService) *PaymentHandler {
@@ -78,8 +106,24 @@ func validateUpdatePayement(req *pb.UpdatePaymentStatusRequest) (violations []*e
 	if err := val.ValidateUUID(req.GetId()); err != nil {
 		violations = append(violations, utils.FieldViolation("id", err))
 	}
-	if err := val.ValidateTxHash(req.GetNetwork, req.GetTxHash()); err != nil {
+	if err := val.ValidateTxHash(req.GetNetwork(), req.GetTxHash()); err != nil {
 		violations = append(violations, utils.FieldViolation("tx_hash", err))
+	}
+
+	return violations
+}
+
+func validateGetAll(req *pb.ListPaymentsRequest) (violations []*errdetails.BadRequest_FieldViolation) {
+	if err := val.ValidateUsername(req.GetUsername()); err != nil {
+		violations = append(violations, utils.FieldViolation("username", err))
+	}
+
+	return violations
+}
+
+func validateGetById(req *pb.GetPaymentRequest) (violations []*errdetails.BadRequest_FieldViolation) {
+	if err := val.ValidateUUID(req.GetId()); err != nil {
+		violations = append(violations, utils.FieldViolation("id", err))
 	}
 
 	return violations

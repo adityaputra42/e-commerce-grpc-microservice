@@ -16,7 +16,7 @@ type PaymentWalletService interface {
 	DeletePaymentWallet(ctx context.Context, req *pb.DeletePaymentWalletRequest) (*pb.DeletePaymentWalletResponse, error)
 	FindPaymentWallet(ctx context.Context, req *pb.GetPaymentWalletRequest) (*pb.PaymentWalletResponse, error)
 	FindAllPaymentWallet(ctx context.Context, req *pb.ListPaymentWalletsRequest) (*pb.ListPaymentWalletsResponse, error)
-	CreatePaymentWalletParams(ctx context.Context, req *pb.CreatePaymentWalletRequest) (*pb.PaymentWalletResponse, error)
+	CreatePaymentWallet(ctx context.Context, req *pb.CreatePaymentWalletRequest) (*pb.PaymentWalletResponse, error)
 	UpdatePaymentWallet(ctx context.Context, req *pb.UpdatePaymentWalletRequest) (*pb.PaymentWalletResponse, error)
 }
 type PaymentWalletServiceImpl struct {
@@ -54,7 +54,7 @@ func (p *PaymentWalletServiceImpl) FindPaymentWallet(ctx context.Context, req *p
 }
 
 // CreatePaymentWalletParams implements PaymentWalletService.
-func (p *PaymentWalletServiceImpl) CreatePaymentWalletParams(ctx context.Context, req *pb.CreatePaymentWalletRequest) (*pb.PaymentWalletResponse, error) {
+func (p *PaymentWalletServiceImpl) CreatePaymentWallet(ctx context.Context, req *pb.CreatePaymentWalletRequest) (*pb.PaymentWalletResponse, error) {
 	var response pb.PaymentWalletResponse
 	err := p.Store.ExecTx(ctx, func(tx *db.Queries) error {
 		_, err := utils.AuthorizationUser(ctx, p.tokenMaker)
