@@ -36,6 +36,16 @@ func (c *CarHandler) CreateCar(ctx context.Context, req *pb.CreateCarRequest) (*
 	return response, nil
 }
 
+func (c *CarHandler) CreateCarWithImage(ctx context.Context, req *pb.CreateCarWithImageRequest) (*pb.CarResponse, error) {
+	// no validation for now
+	response, err := c.service.CreateCarWithImage(ctx, req)
+	if err != nil {
+		status.Errorf(codes.Internal, "%s", err.Error())
+	}
+	return response, nil
+}
+
+
 func (a *CarHandler) FindAllCars(ctx context.Context, req *pb.ListCarsRequest) (*pb.ListCarsResponse, error) {
 
 	res, err := a.service.FindAllCars(ctx, req)

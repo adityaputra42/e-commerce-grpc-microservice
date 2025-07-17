@@ -19,11 +19,12 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	CarService_CreateCar_FullMethodName = "/cars.CarService/CreateCar"
-	CarService_GetCar_FullMethodName    = "/cars.CarService/GetCar"
-	CarService_ListCars_FullMethodName  = "/cars.CarService/ListCars"
-	CarService_UpdateCar_FullMethodName = "/cars.CarService/UpdateCar"
-	CarService_DeleteCar_FullMethodName = "/cars.CarService/DeleteCar"
+	CarService_CreateCar_FullMethodName          = "/cars.CarService/CreateCar"
+	CarService_CreateCarWithImage_FullMethodName = "/cars.CarService/CreateCarWithImage"
+	CarService_GetCar_FullMethodName             = "/cars.CarService/GetCar"
+	CarService_ListCars_FullMethodName           = "/cars.CarService/ListCars"
+	CarService_UpdateCar_FullMethodName          = "/cars.CarService/UpdateCar"
+	CarService_DeleteCar_FullMethodName          = "/cars.CarService/DeleteCar"
 )
 
 // CarServiceClient is the client API for CarService service.
@@ -31,6 +32,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type CarServiceClient interface {
 	CreateCar(ctx context.Context, in *CreateCarRequest, opts ...grpc.CallOption) (*CarResponse, error)
+	CreateCarWithImage(ctx context.Context, in *CreateCarWithImageRequest, opts ...grpc.CallOption) (*CarResponse, error)
 	GetCar(ctx context.Context, in *GetCarRequest, opts ...grpc.CallOption) (*CarResponse, error)
 	ListCars(ctx context.Context, in *ListCarsRequest, opts ...grpc.CallOption) (*ListCarsResponse, error)
 	UpdateCar(ctx context.Context, in *UpdateCarRequest, opts ...grpc.CallOption) (*CarResponse, error)
@@ -49,6 +51,16 @@ func (c *carServiceClient) CreateCar(ctx context.Context, in *CreateCarRequest, 
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(CarResponse)
 	err := c.cc.Invoke(ctx, CarService_CreateCar_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *carServiceClient) CreateCarWithImage(ctx context.Context, in *CreateCarWithImageRequest, opts ...grpc.CallOption) (*CarResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CarResponse)
+	err := c.cc.Invoke(ctx, CarService_CreateCarWithImage_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -100,6 +112,7 @@ func (c *carServiceClient) DeleteCar(ctx context.Context, in *DeleteCarRequest, 
 // for forward compatibility.
 type CarServiceServer interface {
 	CreateCar(context.Context, *CreateCarRequest) (*CarResponse, error)
+	CreateCarWithImage(context.Context, *CreateCarWithImageRequest) (*CarResponse, error)
 	GetCar(context.Context, *GetCarRequest) (*CarResponse, error)
 	ListCars(context.Context, *ListCarsRequest) (*ListCarsResponse, error)
 	UpdateCar(context.Context, *UpdateCarRequest) (*CarResponse, error)
@@ -116,6 +129,9 @@ type UnimplementedCarServiceServer struct{}
 
 func (UnimplementedCarServiceServer) CreateCar(context.Context, *CreateCarRequest) (*CarResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateCar not implemented")
+}
+func (UnimplementedCarServiceServer) CreateCarWithImage(context.Context, *CreateCarWithImageRequest) (*CarResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateCarWithImage not implemented")
 }
 func (UnimplementedCarServiceServer) GetCar(context.Context, *GetCarRequest) (*CarResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetCar not implemented")
@@ -164,6 +180,24 @@ func _CarService_CreateCar_Handler(srv interface{}, ctx context.Context, dec fun
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(CarServiceServer).CreateCar(ctx, req.(*CreateCarRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CarService_CreateCarWithImage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateCarWithImageRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CarServiceServer).CreateCarWithImage(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CarService_CreateCarWithImage_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CarServiceServer).CreateCarWithImage(ctx, req.(*CreateCarWithImageRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -250,6 +284,10 @@ var CarService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateCar",
 			Handler:    _CarService_CreateCar_Handler,
+		},
+		{
+			MethodName: "CreateCarWithImage",
+			Handler:    _CarService_CreateCarWithImage_Handler,
 		},
 		{
 			MethodName: "GetCar",

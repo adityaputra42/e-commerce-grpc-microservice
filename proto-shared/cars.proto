@@ -16,6 +16,12 @@ service CarService {
            body: "*"
          };
   }
+ rpc CreateCarWithImage(CreateCarWithImageRequest) returns (CarResponse){
+    option (google.api.http) = {
+           post: "/v1/car/create-with-image"
+           body: "*"
+         };
+  }
   rpc GetCar(GetCarRequest) returns (CarResponse){
      option (google.api.http) = {
            get: "/v1/cars/{id}"
@@ -38,6 +44,27 @@ service CarService {
          };
   }
 }
+
+message Image {
+    string filename = 1;
+    bytes content = 2;
+}
+
+message CreateCarWithImageRequest {
+  string name = 1;
+  string brand = 2;
+  string model = 3;
+  int32 year = 4;
+  int32 mileage = 5;
+  string transmission = 6;
+  string fuel_type = 7;
+  string location = 8;
+  string description = 9;
+  Image image = 10;
+  double price = 11;
+  string currency = 12;
+}
+
 
 message Car {
   string id = 1;

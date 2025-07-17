@@ -1,13 +1,18 @@
 package services
 
 import (
+	"bytes"
 	"context"
 	"e-commerce-microservice/cars/internal/model"
 	"e-commerce-microservice/cars/internal/pb"
 	"e-commerce-microservice/cars/internal/repository"
 	"e-commerce-microservice/cars/internal/token"
 	"e-commerce-microservice/cars/internal/utils"
+	"encoding/json"
 	"fmt"
+	"io"
+	"mime/multipart"
+	"net/http"
 
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"gorm.io/gorm"
@@ -15,11 +20,13 @@ import (
 
 type CarService interface {
 	CreateCar(ctx context.Context, req *pb.CreateCarRequest) (*pb.CarResponse, error)
+	CreateCarWithImage(ctx context.Context, req *pb.CreateCarWithImageRequest) (*pb.CarResponse, error)
 	FindCarById(ctx context.Context, req *pb.GetCarRequest) (*pb.CarResponse, error)
 	UpdateCar(ctx context.Context, req *pb.UpdateCarRequest) (*pb.CarResponse, error)
 	FindAllCars(ctx context.Context, req *pb.ListCarsRequest) (*pb.ListCarsResponse, error)
 	DeletCar(ctx context.Context, req *pb.DeleteCarRequest) (*pb.DeleteCarResponse, error)
 }
+
 type CarServiceImpl struct {
 	tokenMaker token.Maker
 	db         *gorm.DB
@@ -109,6 +116,108 @@ func (c *CarServiceImpl) DeletCar(ctx context.Context, req *pb.DeleteCarRequest)
 	return &pb.DeleteCarResponse{Message: "Success"}, nil
 
 }
+
+// CreateCarWithImage implements CarService.
+func (c *CarServiceImpl) CreateCarWithImage(ctx context.Context, req *pb.CreateCarWithImageRequest) (*pb.CarResponse, error) {
+	var repsonse pb.CarResponse
+	err := c.db.Transaction(func(tx *gorm.DB) error {
+		authPayload, err := utils.AuthorizationUser(ctx, c.tokenMaker)
+
+		if err != nil {
+			return utils.UnauthenticatedError(err)
+		}
+		if authPayload.Role != utils.AdminRole {
+			return fmt.Errorf("user not permited")
+		}
+
+		// Upload image to uploader service
+		body := &bytes.Buffer{}
+		writer := multipart.NewWriter(body)
+		part, err := writer.CreateFormFile("file", req.GetImage().GetFilename())
+		if err != nil {
+			return err
+		}
+		_, err = io.Copy(part, bytes.NewReader(req.GetImage().GetContent()))
+		if err != nil {
+			return err
+		}
+		err = writer.Close()
+		if err != nil {
+			return err
+		}
+
+		r, err := http.NewRequest("POST", "http://localhost:8080/upload", body)
+		if err != nil {
+			return err
+		}
+		r.Header.Set("Content-Type", writer.FormDataContentType())
+
+		client := &http.Client{}
+		resp, err := client.Do(r)
+		if err != nil {
+			return err
+		}
+		defer resp.Body.Close()
+
+		if resp.StatusCode != http.StatusOK {
+			return fmt.Errorf("failed to upload image: %s", resp.Status)
+		}
+
+		var uploadResp struct {
+			URL string `json:"url"`
+		}
+		if err := json.NewDecoder(resp.Body).Decode(&uploadResp); err != nil {
+			return err
+		}
+
+		carReq := model.Cars{
+			Name:         req.GetName(),
+			Brand:        req.GetBrand(),
+			Model:        req.GetModel(),
+			Year:         req.GetYear(),
+			Mileage:      req.GetMileage(),
+			Transmission: req.GetTransmission(),
+			FuelType:     req.GetFuelType(),
+			Location:     req.GetLocation(),
+			Description:  req.GetDescription(),
+			Images:       []string{uploadResp.URL},
+			Price:        req.GetPrice(),
+			Currency:     req.GetCurrency(),
+		}
+		result, err := c.repo.CreateCar(ctx, tx, &carReq)
+		if err != nil {
+			return fmt.Errorf("Failed to create Car")
+		}
+		repsonse = pb.CarResponse{
+			Car: &pb.Car{
+				Id:           result.ID,
+				Name:         result.Name,
+				Model:        result.Model,
+				Brand:        result.Brand,
+				Year:         result.Year,
+				Mileage:      result.Mileage,
+				Transmission: result.Transmission,
+				FuelType:     result.FuelType,
+				Location:     result.Location,
+				Description:  result.Description,
+				Images:       result.Images,
+				Price:        result.Price,
+				Currency:     result.Currency,
+				IsSold:       result.IsSold,
+				CreatedAt:    timestamppb.New(result.CreatedAt),
+				UpdatedAt:    timestamppb.New(result.UpdatedAt),
+			},
+		}
+		return nil
+	})
+
+	if err != nil {
+		return &pb.CarResponse{}, err
+	}
+
+	return &repsonse, nil
+}
+
 
 // FindAllCars implements CarService.
 func (c *CarServiceImpl) FindAllCars(ctx context.Context, req *pb.ListCarsRequest) (*pb.ListCarsResponse, error) {

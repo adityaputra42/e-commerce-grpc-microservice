@@ -24,7 +24,7 @@ CREATE TABLE payments (
 
 
 CREATE INDEX idx_payments_order_id ON payments(order_id);
-CREATE INDEX idx_payments_user_id ON payments(user_id);
+CREATE INDEX idx_payments_username ON payments(username);
 CREATE INDEX idx_payments_status ON payments(status);
 CREATE INDEX idx_payments_network ON payments(network);
 CREATE INDEX idx_payments_tx_hash ON payments(tx_hash);
