@@ -1,21 +1,27 @@
 package main
 
 import (
+	"e-commerce-microservice/uploader/config"
 	"e-commerce-microservice/uploader/storage"
 	"fmt"
-	"log"
+
 	"net/http"
-	"os"
+
+	"github.com/rs/zerolog/log"
 )
 
 func main() {
-	supabaseURL := os.Getenv("SUPABASE_URL") // Ganti dengan .env atau hardcoded jika mau
-	supabaseKey := os.Getenv("SUPABASE_KEY")
-	bucket := "your-bucket-name" // Ganti dengan nama bucket kamu
+	conf, err := config.LoadConfig(".")
 
-	uploader, err := storage.NewSupabaseUploader(supabaseURL, supabaseKey, bucket)
 	if err != nil {
-		log.Fatalf("❌ Failed to create Supabase client: %v", err)
+		log.Fatal().Err(err).Msg("Cannot load config")
+		panic(err)
+	}
+
+	uploader, err := storage.NewSupabaseUploader(conf.SupabaseUrl, conf.SupabaseKey, conf.Bucket)
+	if err != nil {
+		log.Fatal().Err(err).Msg("Failed to create Supabase client")
+
 	}
 
 	http.HandleFunc("/upload", func(w http.ResponseWriter, r *http.Request) {
@@ -31,24 +37,49 @@ func main() {
 			return
 		}
 
-		file, header, err := r.FormFile("image")
-		if err != nil {
-			http.Error(w, "Invalid file", http.StatusBadRequest)
+		form := r.MultipartForm
+		files := form.File["images"]
+		if len(files) == 0 {
+			// Fall back to single file upload if no multiple files found
+			file, header, err := r.FormFile("image")
+			if err != nil {
+				http.Error(w, "No files uploaded", http.StatusBadRequest)
+				return
+			}
+			defer file.Close()
+
+			publicURL, err := uploader.UploadImage(r.Context(), header, "car")
+			if err != nil {
+				http.Error(w, "Upload failed: "+err.Error(), http.StatusInternalServerError)
+				return
+			}
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusOK)
+			fmt.Fprintf(w, `{"urls":["%s"]}`, publicURL)
 			return
 		}
-		defer file.Close()
 
-		publicURL, err := uploader.UploadImage(r.Context(), header, "car")
+		urls, err := uploader.UploadImages(r.Context(), files, "car")
 		if err != nil {
 			http.Error(w, "Upload failed: "+err.Error(), http.StatusInternalServerError)
 			return
 		}
 
-		// Kirim response JSON manual
+		// Convert urls slice to JSON array string
+		urlJSON := "["
+		for i, url := range urls {
+			if i > 0 {
+				urlJSON += ","
+			}
+			urlJSON += fmt.Sprintf(`"%s"`, url)
+		}
+		urlJSON += "]"
+
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
-		fmt.Fprintf(w, `{"url":"%s"}`, publicURL)
+		fmt.Fprintf(w, `{"urls":%s}`, urlJSON)
 	})
 	fmt.Println("✅ Uploader service started on :8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	http.ListenAndServe(":8080", nil)
+	log.Info().Msg("Uploader service started on :8080")
 }

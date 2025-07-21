@@ -61,7 +61,7 @@ func (c *CarServiceImpl) CreateCar(ctx context.Context, req *pb.CreateCarRequest
 		}
 		result, err := c.repo.CreateCar(ctx, tx, &carReq)
 		if err != nil {
-			return fmt.Errorf("Failed to create Car")
+			return fmt.Errorf("failed to create Car")
 		}
 		repsonse = pb.CarResponse{
 			Car: &pb.Car{
@@ -130,10 +130,9 @@ func (c *CarServiceImpl) CreateCarWithImage(ctx context.Context, req *pb.CreateC
 			return fmt.Errorf("user not permited")
 		}
 
-		// Upload image to uploader service
 		body := &bytes.Buffer{}
 		writer := multipart.NewWriter(body)
-		part, err := writer.CreateFormFile("file", req.GetImage().GetFilename())
+		part, err := writer.CreateFormFile("image", req.GetImage().GetFilename())
 		if err != nil {
 			return err
 		}
@@ -164,7 +163,7 @@ func (c *CarServiceImpl) CreateCarWithImage(ctx context.Context, req *pb.CreateC
 		}
 
 		var uploadResp struct {
-			URL string `json:"url"`
+			Urls []string `json:"urls"`
 		}
 		if err := json.NewDecoder(resp.Body).Decode(&uploadResp); err != nil {
 			return err
@@ -180,13 +179,16 @@ func (c *CarServiceImpl) CreateCarWithImage(ctx context.Context, req *pb.CreateC
 			FuelType:     req.GetFuelType(),
 			Location:     req.GetLocation(),
 			Description:  req.GetDescription(),
-			Images:       []string{uploadResp.URL},
+			Images:       []string{},
 			Price:        req.GetPrice(),
 			Currency:     req.GetCurrency(),
 		}
+		if len(uploadResp.Urls) > 0 {
+			carReq.Images = []string{uploadResp.Urls[0]}
+		}
 		result, err := c.repo.CreateCar(ctx, tx, &carReq)
 		if err != nil {
-			return fmt.Errorf("Failed to create Car")
+			return fmt.Errorf("failed to create Car")
 		}
 		repsonse = pb.CarResponse{
 			Car: &pb.Car{
