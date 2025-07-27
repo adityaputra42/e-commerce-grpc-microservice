@@ -56,8 +56,9 @@ message Order {
   string username = 2;
   string car_id = 3;
   string status = 4;
-  google.protobuf.Timestamp created_at = 5;
-  google.protobuf.Timestamp updated_at = 6;
+  string amount = 5;
+  google.protobuf.Timestamp created_at = 6;
+  google.protobuf.Timestamp updated_at = 7;
 }
 
 message OrderResponse {
@@ -67,6 +68,7 @@ message OrderResponse {
 message CreateOrderRequest {
   string username = 1;
   string car_id = 2;
+  string amount = 3;
   string network = 4;           // solana, base, bnb
   string currency = 5;   
 }

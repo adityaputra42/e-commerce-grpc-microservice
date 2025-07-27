@@ -17,11 +17,12 @@ INSERT INTO orders (
  id,
  username,
  car_id,
- status
+ status,
+ amount
 ) VALUES (
-  $1, $2 ,$3, $4
+  $1, $2 ,$3, $4, $5
 )
-RETURNING id, username, car_id, status, created_at, updated_at
+RETURNING id, username, car_id, status, created_at, updated_at, amount
 `
 
 type CreateOrderParams struct {
@@ -29,6 +30,7 @@ type CreateOrderParams struct {
 	Username string    `json:"username"`
 	CarID    uuid.UUID `json:"car_id"`
 	Status   string    `json:"status"`
+	Amount   float64   `json:"amount"`
 }
 
 func (q *Queries) CreateOrder(ctx context.Context, arg CreateOrderParams) (Order, error) {
@@ -37,6 +39,7 @@ func (q *Queries) CreateOrder(ctx context.Context, arg CreateOrderParams) (Order
 		arg.Username,
 		arg.CarID,
 		arg.Status,
+		arg.Amount,
 	)
 	var i Order
 	err := row.Scan(
@@ -46,6 +49,7 @@ func (q *Queries) CreateOrder(ctx context.Context, arg CreateOrderParams) (Order
 		&i.Status,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.Amount,
 	)
 	return i, err
 }
@@ -61,7 +65,7 @@ func (q *Queries) DeleteOrder(ctx context.Context, id uuid.UUID) error {
 }
 
 const getOrder = `-- name: GetOrder :one
-SELECT id, username, car_id, status, created_at, updated_at FROM orders
+SELECT id, username, car_id, status, created_at, updated_at, amount FROM orders
 WHERE id = $1 LIMIT 1
 `
 
@@ -75,12 +79,13 @@ func (q *Queries) GetOrder(ctx context.Context, id uuid.UUID) (Order, error) {
 		&i.Status,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.Amount,
 	)
 	return i, err
 }
 
 const listOrder = `-- name: ListOrder :many
-SELECT id, username, car_id, status, created_at, updated_at FROM orders
+SELECT id, username, car_id, status, created_at, updated_at, amount FROM orders
 ORDER BY id
 LIMIT $1
 OFFSET $2
@@ -107,6 +112,7 @@ func (q *Queries) ListOrder(ctx context.Context, arg ListOrderParams) ([]Order, 
 			&i.Status,
 			&i.CreatedAt,
 			&i.UpdatedAt,
+			&i.Amount,
 		); err != nil {
 			return nil, err
 		}
@@ -123,7 +129,7 @@ UPDATE orders
 SET 
   status = COALESCE($1,status)
 WHERE id = $2
-RETURNING id, username, car_id, status, created_at, updated_at
+RETURNING id, username, car_id, status, created_at, updated_at, amount
 `
 
 type UpdateOrderParams struct {
@@ -141,6 +147,7 @@ func (q *Queries) UpdateOrder(ctx context.Context, arg UpdateOrderParams) (Order
 		&i.Status,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.Amount,
 	)
 	return i, err
 }

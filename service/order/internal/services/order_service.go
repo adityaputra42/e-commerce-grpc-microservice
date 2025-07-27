@@ -7,7 +7,9 @@ import (
 	"e-commerce-microservice/order/internal/repository"
 	"e-commerce-microservice/order/internal/token"
 	"e-commerce-microservice/order/internal/utils"
+	"e-commerce-microservice/order/internal/worker"
 	"fmt"
+	"strconv"
 
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgtype"
@@ -28,6 +30,7 @@ type OrdeServiceImpl struct {
 	Store      db.Store
 	repo       repository.OrderRepository
 	tokenMaker token.Maker
+	natsWorker *worker.NatsWorker
 }
 
 // CancelOrder implements OrdeService.
@@ -94,13 +97,32 @@ func (o *OrdeServiceImpl) CreateOrder(ctx context.Context, req *pb.CreateOrderRe
 		if err != nil {
 			return fmt.Errorf("invalid Car UUID: %s", err)
 		}
+		amount, err := strconv.ParseFloat(req.GetAmount(), 64)
+		if err != nil {
+			return fmt.Errorf("failed to parse amount :%s", err)
+		}
 		param := db.CreateOrderParams{
 			Username: req.GetUsername(),
 			CarID:    carId,
+			Amount:   amount,
 		}
 		result, err := o.repo.CreateOrder(ctx, tx, param)
 		if err != nil {
 			return fmt.Errorf("failed to create order: %s", err)
+		}
+
+		// Publish order created event
+		if o.natsWorker != nil {
+			err = o.natsWorker.PublishOrderCreated(ctx, worker.OrderCreatedPayload{
+				OrderID:     result.ID.String(),
+				UserID:      result.Username,
+				TotalAmount: result.Amount,
+				CreatedAt:   result.CreatedAt,
+			})
+			if err != nil {
+				// Log the error but don't fail the order creation
+				fmt.Printf("Failed to publish order created event: %v\n", err)
+			}
 		}
 
 		response = pb.OrderResponse{
@@ -265,6 +287,18 @@ func (o *OrdeServiceImpl) UpdateOrder(ctx context.Context, req *pb.UpdateOrderRe
 func NewOrderService(
 	store db.Store,
 	repo repository.OrderRepository,
-	tokenMaker token.Maker) OrdeService {
-	return &OrdeServiceImpl{Store: store, repo: repo, tokenMaker: tokenMaker}
+	tokenMaker token.Maker,
+	natsURL string) (OrdeService, error) {
+
+	natsWorker, err := worker.NewNatsWorker(natsURL)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create NATS worker: %v", err)
+	}
+
+	return &OrdeServiceImpl{
+		Store:      store,
+		repo:       repo,
+		tokenMaker: tokenMaker,
+		natsWorker: natsWorker,
+	}, nil
 }

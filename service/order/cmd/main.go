@@ -65,7 +65,10 @@ func runGrpcServer(
 
 	}
 	orderRepo := repository.NewOrderRepository(db.Queries)
-	orderService := services.NewOrderService(db, orderRepo, tokenMaker)
+	orderService, err := services.NewOrderService(db, orderRepo, tokenMaker, config.NatsURL)
+	if err != nil {
+		log.Fatal().Err(err).Msg("cannot create order service")
+	}
 	orderHandler := handler.NewOrderHandler(orderService)
 
 	grpcLogger := grpc.UnaryInterceptor(utils.GrpcLogger)

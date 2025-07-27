@@ -13,7 +13,8 @@ type Configuration struct {
 	GrpcServerAddress    string        `mapstructure:"GRPC_SERVER_ADDRESS"`
 	SecretKey            string        `mapstructure:"SECRET_KEY"`
 	AccessTokenDuration  time.Duration `mapstructure:"ACCESS_TOKEN_DURATION"`
-	RefreshTokenDuration time.Duration `mapstructure:"REFRESH_TOKEN_DURATIOn"`
+	RefreshTokenDuration time.Duration `mapstructure:"REFRESH_TOKEN_DURATION"`
+	NatsURL              string        `mapstructure:"NATS_URL"`
 }
 
 var conf Configuration
